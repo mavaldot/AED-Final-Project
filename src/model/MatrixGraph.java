@@ -70,10 +70,15 @@ public class MatrixGraph<T> {
 		
 		int index = nodes.indexOf(node);
 		
-		nodes.remove(index);
-		
-		edges.remove(index);
-		edges.forEach((n) -> n.remove(index));
+		if(index != -1) {
+			nodes.remove(index);
+			
+			edges.remove(index);
+			edges.forEach((n) -> n.remove(index));
+		}
+		else {
+			throw new NodeNotFoundException();
+		}
 		
 	}
 	
@@ -82,15 +87,23 @@ public class MatrixGraph<T> {
 		int row = nodes.indexOf(nodeF);
 		int column = nodes.indexOf(nodeC);
 		
-		for(int i = 0; i < edges.get(row).get(column).size(); i++){
+		if((row == -1) || (column == -1)){
+			throw new NodeNotFoundException();
+		}
+		else {
+			boolean run = true;
 			
-			if(edges.get(row).get(column).get(i).intValue() == weight){
-				edges.get(row).get(column).remove(i);
-				if(!directed){
-					edges.get(column).get(row).remove(i);
+			for(int i = 0; (i < edges.get(row).get(column).size()) && run; i++){
+				
+				if(edges.get(row).get(column).get(i).intValue() == weight){
+					edges.get(row).get(column).remove(i);
+					if((!directed) && (row != column)){
+						edges.get(column).get(row).remove(i);
+					}
+					run = false;
 				}
+				
 			}
-			
 		}
 		
 	}

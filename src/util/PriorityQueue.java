@@ -1,95 +1,117 @@
 package util;
 
+import java.util.ArrayList;
+
 import exception.EmptyListException;
 
 public class PriorityQueue<E> implements List<E>{
-
+	
 	//Constants
 	public enum Priority{
 		MIN, MAX;
 	}
 	
 	//Attributes
-	private Priority type; 
-	private int size;
-	private PriorityNode<E> first;
-	private PriorityNode<E> last;
+	private Priority type;
+	private ArrayList<E> nodes;
+	private ArrayList<Integer> priorities;
 	
 	//Constructor
 	public PriorityQueue(Priority type) {
-		this.type=type;
-		size = 0;
-		first = null;
-		last = null;
+		this.type = type;
+		this.nodes = new ArrayList<E>();
+		this.priorities = new ArrayList<Integer>();
 	}
 	
 	//Methods
 	public void enqueue(E element, int priority){
-		PriorityNode<E> node = new PriorityNode<E>(element, priority);
-		
-		PriorityNode<E> prev = null;
-		PriorityNode<E> actual = first;
-		
-		boolean found = false;
-		while((actual != null) && (!found)){
-			found = ( (type.equals(Priority.MAX)) && (node.getPriority() >= actual.getPriority()) ) || 	//MAX
-					( (type.equals(Priority.MIN)) && (node.getPriority() <= actual.getPriority()) );	//MIN
-			
-			if(found){
-				node.setNext(actual);
-				if(prev == null){
-					first = node;
-				}
-				else{
-					prev.setNext(node);
-				}
-			}
-		}
-		
-		if(!found){
-			last.setNext(node);
-			last = node;
-		}
-		
-		size++;
+		this.nodes.add(element);
+		this.priorities.add(priority);
 	}
 	
 	public void decreaseKey(E element, int priority) {
-		PriorityNode<E> actual = first;
-		boolean run = true;
-		while((actual != null) && (run)) {
-			if(actual.getElement() == element){
-				actual.setPriority(priority);
-			}
-			else{
-				actual = actual.getNext();
-			}
-		}
+		int i = nodes.indexOf(element);
+		if(i != -1)
+			priorities.set(i, priority);
 	}
 	
 	public E dequeue() {
-		if(isEmpty())
+		int index = -1;
+		Integer m = null;
+		
+		
+		for(int i = 0; i < priorities.size(); i++){
+			if(type.equals(Priority.MIN)){
+				if((m == null) || (priorities.get(i).intValue() < m.intValue())){
+					index = i;
+					m = priorities.get(i);
+				}
+			}
+			else{
+				if((m == null) || (priorities.get(i).intValue() > m.intValue())){
+					index = i;
+					m = priorities.get(i);
+				}
+			}
+			
+		}
+		
+		E node = null;
+		if(index != -1){
+			node = nodes.get(index);
+			
+			nodes.remove(index);
+			priorities.remove(index);
+		}
+		else{
 			throw new EmptyListException();
-		E element = first.getElement();
-		first = first.getNext();
-		if(isEmpty())
-			last = null;
-		size--;
-		return element;
+		}
+		
+		return node;
 	}
 	
 	public int size() {
-		return size;
+		return nodes.size();
 	}
 
 	public boolean isEmpty() {
-		return first == null;
+		return nodes.size() == 0;
 	}
 
 	public E peek() {
-		if(isEmpty())
+		int index = -1;
+		Integer m = null;
+		
+		
+		for(int i = 0; i < priorities.size(); i++){
+			if(type.equals(Priority.MIN)){
+				if((m == null) || (priorities.get(i).intValue() < m.intValue())){
+					index = i;
+					m = priorities.get(i);
+				}
+			}
+			else{
+				if((m == null) || (priorities.get(i).intValue() > m.intValue())){
+					index = i;
+					m = priorities.get(i);
+				}
+			}
+			
+		}
+		
+		E node = null;
+		if(index != -1){
+			node = nodes.get(index);
+		}
+		else{
 			throw new EmptyListException();
-		return first.getElement();
+		}
+		
+		return node;
+	}
+	
+	public String toString(){
+		return nodes.toString();
 	}
 	
 }

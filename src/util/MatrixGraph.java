@@ -220,7 +220,7 @@ public class MatrixGraph<T> {
 		node.setFTimestamps(forest.getTime());
 	}
 	
-	public void prim(T node) {
+	public MatrixGraph<SearchNode<T>> prim(T node) {
 		MatrixGraph<SearchNode<T>> tree=new MatrixGraph<SearchNode<T>>(false, false, false);
 		for(T vertex: nodes) {
 			tree.addNode(new SearchNode<T>(vertex));
@@ -236,6 +236,7 @@ public class MatrixGraph<T> {
 		
 		while(!queue.isEmpty()){
 			SearchNode<T> element = queue.dequeue();
+			
 			int eIndex = nodes.indexOf(element.getObject());
 			
 			for(int i = 0; i < edges.get(eIndex).size(); i++){
@@ -252,8 +253,9 @@ public class MatrixGraph<T> {
 						tree.getNode(i).setDistance(edge);
 						queue.decreaseKey(tree.getNode(i), edge);
 						tree.getNode(i).setAncestor(element);
-						for(ArrayList<Integer> edgeVerf : tree.getEdges().get(i)) {
-							edgeVerf.clear();
+						for(int j = 0; j < tree.getEdges().get(i).size(); j++) {
+							tree.getEdges().get(i).get(j).clear();
+							tree.getEdges().get(j).get(i).clear();
 						}
 						tree.addEdge(element, tree.getNode(i), edge);
 					}
@@ -264,6 +266,8 @@ public class MatrixGraph<T> {
 			element.setColor(SearchNode.BLACK);
 			
 		}
+		
+		return tree;
 	}
 	
 	public T getNode(int index){

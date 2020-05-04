@@ -77,4 +77,7 @@ public class SearchNode<T> {
 		timestamps.setVal2(f);
 	}
 	
+	public String toString() {
+		return object.toString();
+	}
 }

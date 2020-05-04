@@ -2,8 +2,6 @@ package util;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-
 import org.junit.jupiter.api.Test;
 
 import exception.LoopException;
@@ -60,6 +58,23 @@ class MatrixGraphTest {
 		matrixGraph.addEdge(matrixGraph.getNode(1),matrixGraph.getNode(2),1);
 	}
 	
+	private void setUpSceneSimpleGraph3() {
+		this.matrixGraph=new MatrixGraph<String>(false,false,false);
+		
+		matrixGraph.addNode("Johan");
+		matrixGraph.addNode("Esteban");
+		matrixGraph.addNode("Mateo");
+		matrixGraph.addNode("Juan");
+		
+		matrixGraph.addEdge(matrixGraph.getNode(0),matrixGraph.getNode(1),5);
+		matrixGraph.addEdge(matrixGraph.getNode(1),matrixGraph.getNode(2),3);
+		matrixGraph.addEdge(matrixGraph.getNode(2),matrixGraph.getNode(3),1);
+		matrixGraph.addEdge(matrixGraph.getNode(3),matrixGraph.getNode(0),6);
+		
+		matrixGraph.addEdge(matrixGraph.getNode(0),matrixGraph.getNode(2),2);
+		matrixGraph.addEdge(matrixGraph.getNode(1),matrixGraph.getNode(3),4);
+	}
+	
 	private void setUpSceneMultiDirectedGraph() {
 		this.matrixGraph=new MatrixGraph<String>(true,true,true);
 		
@@ -87,6 +102,22 @@ class MatrixGraphTest {
 		matrixGraph.addEdge(matrixGraph.getNode(0),matrixGraph.getNode(0),4);
 		matrixGraph.addEdge(matrixGraph.getNode(1),matrixGraph.getNode(2),1);
 		matrixGraph.addEdge(matrixGraph.getNode(1),matrixGraph.getNode(2),5);
+		matrixGraph.addEdge(matrixGraph.getNode(2),matrixGraph.getNode(0),3);
+	}
+	
+	private void setUpSceneMultiDirectedGraph3() {
+		this.matrixGraph=new MatrixGraph<String>(true,true,true);
+		
+		matrixGraph.addNode("Johan");
+		matrixGraph.addNode("Esteban");
+		matrixGraph.addNode("Mateo");
+		matrixGraph.addNode("Juan");
+		
+		matrixGraph.addEdge(matrixGraph.getNode(0),matrixGraph.getNode(1),2);
+		matrixGraph.addEdge(matrixGraph.getNode(0),matrixGraph.getNode(0),4);
+		matrixGraph.addEdge(matrixGraph.getNode(1),matrixGraph.getNode(2),1);
+		matrixGraph.addEdge(matrixGraph.getNode(1),matrixGraph.getNode(2),5);
+		matrixGraph.addEdge(matrixGraph.getNode(2),matrixGraph.getNode(1),5);
 		matrixGraph.addEdge(matrixGraph.getNode(2),matrixGraph.getNode(0),3);
 	}
 	
@@ -357,6 +388,68 @@ class MatrixGraphTest {
 		assertNull(forest.getNode(3).getAncestor());
 		//...
 		
+	}
+	
+	@Test
+	void testPrim(){
+		//Simple Graph
+		setUpSceneSimpleGraph3();
+		
+		MatrixGraph<SearchNode<String>> tree = matrixGraph.prim(matrixGraph.getNode(0));
+		
+		assertEquals(tree.getNode(0).getColor(), SearchNode.BLACK);
+		assertEquals(tree.getNode(0).getDistance(), 0);
+		assertNull(tree.getNode(0).getAncestor());
+		
+		assertEquals(tree.getEdge(0, 2).get(0), 2);
+		assertEquals(tree.getEdge(2, 0).get(0), 2);
+		
+		assertEquals(tree.getNode(2).getColor(), SearchNode.BLACK);
+		assertEquals(tree.getNode(2).getDistance(), 2);
+		assertEquals(tree.getNode(2).getAncestor(), tree.getNode(0));
+		
+		assertEquals(tree.getEdge(1, 2).get(0), 3);
+		assertEquals(tree.getEdge(2, 1).get(0), 3);
+		
+		assertEquals(tree.getNode(1).getColor(), SearchNode.BLACK);
+		assertEquals(tree.getNode(1).getDistance(), 3);
+		assertEquals(tree.getNode(1).getAncestor(), tree.getNode(2));
+		
+		assertEquals(tree.getEdge(3, 2).get(0), 1);
+		assertEquals(tree.getEdge(2, 3).get(0), 1);
+		
+		assertEquals(tree.getNode(3).getColor(), SearchNode.BLACK);
+		assertEquals(tree.getNode(3).getDistance(), 1);
+		assertEquals(tree.getNode(3).getAncestor(), tree.getNode(2));
+		//...
+		
+		//Multi Directed Graph
+		setUpSceneMultiDirectedGraph3();
+		
+		tree = matrixGraph.prim(matrixGraph.getNode(2));
+		
+		assertEquals(tree.getNode(2).getColor(), SearchNode.BLACK);
+		assertEquals(tree.getNode(2).getDistance(), 0);
+		assertNull(tree.getNode(2).getAncestor());
+		
+		assertEquals(tree.getEdge(0, 2).get(0), 3);
+		assertEquals(tree.getEdge(2, 0).get(0), 3);
+		
+		assertEquals(tree.getNode(0).getColor(), SearchNode.BLACK);
+		assertEquals(tree.getNode(0).getDistance(), 3);
+		assertEquals(tree.getNode(0).getAncestor(), tree.getNode(2));
+		
+		assertEquals(tree.getEdge(0, 1).get(0), 2);
+		assertEquals(tree.getEdge(1, 0).get(0), 2);
+		
+		assertEquals(tree.getNode(1).getColor(), SearchNode.BLACK);
+		assertEquals(tree.getNode(1).getDistance(), 2);
+		assertEquals(tree.getNode(1).getAncestor(), tree.getNode(0));
+		
+		assertEquals(tree.getNode(3).getColor(), SearchNode.BLACK);
+		assertEquals(tree.getNode(3).getDistance(), Integer.MAX_VALUE);
+		assertNull(tree.getNode(2).getAncestor());
+		//...
 	}
 	
 }

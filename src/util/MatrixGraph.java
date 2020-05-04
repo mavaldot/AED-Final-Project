@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import exception.LoopException;
 import exception.MultipleEdgesException;
 import exception.NodeNotFoundException;
+import util.PriorityQueue.Priority;
 
 public class MatrixGraph<T> {
 
@@ -217,6 +218,52 @@ public class MatrixGraph<T> {
 		node.setColor(SearchNode.BLACK);
 		forest.setTime(forest.getTime()+1);
 		node.setFTimestamps(forest.getTime());
+	}
+	
+	public void prim(T node) {
+		MatrixGraph<SearchNode<T>> tree=new MatrixGraph<SearchNode<T>>(false, false, false);
+		for(T vertex: nodes) {
+			tree.addNode(new SearchNode<T>(vertex));
+		}
+		
+		int index = nodes.indexOf(node);
+		tree.getNode(index).setDistance(0);
+		
+		PriorityQueue<SearchNode<T>> queue=new PriorityQueue<SearchNode<T>>(Priority.MIN);
+		for(SearchNode<T> vertex: tree.getNodes()) {
+			queue.enqueue(vertex, vertex.getDistance());
+		}
+		
+		while(!queue.isEmpty()){
+			SearchNode<T> element = queue.dequeue();
+			int eIndex = nodes.indexOf(element.getObject());
+			
+			for(int i = 0; i < edges.get(eIndex).size(); i++){
+				if(edges.get(eIndex).get(i).size() != 0){
+					
+					int edge = Integer.MAX_VALUE;
+					for(Integer tEdge :edges.get(eIndex).get(i)){
+						if(tEdge < edge){
+							edge = tEdge;
+						}
+					}
+					
+					if((tree.getNode(i).getColor() == SearchNode.WHITE) && (edge < tree.getNode(i).getDistance())){
+						tree.getNode(i).setDistance(edge);
+						queue.decreaseKey(tree.getNode(i), edge);
+						tree.getNode(i).setAncestor(element);
+						for(ArrayList<Integer> edgeVerf : tree.getEdges().get(i)) {
+							edgeVerf.clear();
+						}
+						tree.addEdge(element, tree.getNode(i), edge);
+					}
+					
+				}
+			}
+			
+			element.setColor(SearchNode.BLACK);
+			
+		}
 	}
 	
 	public T getNode(int index){

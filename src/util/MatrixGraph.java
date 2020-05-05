@@ -117,7 +117,7 @@ public class MatrixGraph<T> {
 			tree.addNode(new SearchNode<T>(vertex));
 		}
 		
-		int index=nodes.indexOf(node);
+		int index = nodes.indexOf(node);
 		tree.getNode(index).setColor(SearchNode.GRAY);
 		tree.getNode(index).setDistance(0);
 		tree.getNode(index).setAncestor(null);
@@ -265,6 +265,48 @@ public class MatrixGraph<T> {
 			
 			element.setColor(SearchNode.BLACK);
 			
+		}
+		
+		return tree;
+	}
+	
+	public MatrixGraph<SearchNode<T>> kruskal() {
+		
+		MatrixGraph<SearchNode<T>> tree = new MatrixGraph<SearchNode<T>>(false, false, false);
+		DisjointSet<T> sets = new DisjointSet<>();
+		
+		for(T v : nodes) {
+			sets.makeSet(v);
+			tree.addNode(new SearchNode<T>(v));
+		}
+		
+		PriorityQueue<Tuple<SearchNode<T>, SearchNode<T>>> queue = new PriorityQueue<Tuple<SearchNode<T>, SearchNode<T>>>(Priority.MIN);
+		
+		for(int i = 0; i < edges.size(); i++) {
+			for(int j = i; j < edges.get(0).size(); j++) {
+				
+				if(edges.get(i).get(j).size() > 0) {
+					
+					int edge = Integer.MAX_VALUE;
+					for(Integer tEdge :edges.get(i).get(j)){
+						if(tEdge < edge){
+							edge = tEdge;
+						}
+					}
+					
+					queue.enqueue(new Tuple<SearchNode<T>, SearchNode<T>>(tree.getNode(i), tree.getNode(j)), edge);
+				}
+			}
+		}
+		while(!queue.isEmpty()) {
+			
+			int weight = queue.peekPriory();
+			Tuple<SearchNode<T>, SearchNode<T>> edge = queue.dequeue();
+			
+			if(sets.union(edge.getVal1().getObject(), edge.getVal2().getObject())) {
+
+				tree.addEdge(edge.getVal1(), edge.getVal2(), weight);
+			}
 		}
 		
 		return tree;

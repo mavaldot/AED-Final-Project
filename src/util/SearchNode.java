@@ -77,6 +77,14 @@ public class SearchNode<T> {
 		timestamps.setVal2(f);
 	}
 	
+	public Integer getDTimestamps() {
+		return timestamps.getVal1();
+	}
+	
+	public Integer getFTimestamps() {
+		return timestamps.getVal2();
+	}
+	
 	public String toString() {
 		return object.toString();
 	}

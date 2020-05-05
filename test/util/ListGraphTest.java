@@ -202,10 +202,17 @@ class ListGraphTest {
 	void testRemoveNode() {
 		
 		setSimpleGraph();
+		lGraph.addEdge("Ariza", "Johan");
+		lGraph.addEdge("Johan", "Mateo");
+		lGraph.addEdge("Restrepo", "Johan");
 		lGraph.removeNode("Ariza");
 		lGraph.removeNode("Mateo");
 		assertEquals(lGraph.getNode(0), "Johan");
 		assertEquals(lGraph.getNode(1), "Restrepo");
+		assertEquals(lGraph.getEdges().get(0).get(0).getVal1().intValue(), 1);
+		assertEquals(lGraph.getEdges().get(1).get(0).getVal1().intValue(), 0);
+//		System.out.println(lGraph.getEdges());
+		
 		
 	}
 	

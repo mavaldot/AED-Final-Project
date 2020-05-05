@@ -117,15 +117,41 @@ public class ListGraph<T>{
 		
 	}
 	
-	public void removeNode(T node) throws NodeNotFoundException {
-		
-		int index = nodes.indexOf(node);
-		
-		if (index == -1) throw new NodeNotFoundException("Could not find the node");
-		
-		nodes.remove(index);
-		edges.remove(index);
-	}
+//	public void removeNode(T node) throws NodeNotFoundException {
+//		
+//		int index = nodes.indexOf(node);
+//		
+//		if (index == -1) throw new NodeNotFoundException("Could not find the node");
+//		
+//		nodes.remove(index);
+//		edges.remove(index);
+//	}
+	
+	public void removeNode(T node){
+
+        int index = nodes.indexOf(node);
+
+        nodes.remove(index);
+        edges.remove(index);
+
+        for (int i = 0; i < edges.size(); i++) {
+
+            for (int j = 0; j < edges.get(i).size(); j++) {
+
+                if (edges.get(i).get(j).getVal1() > index) {
+                    edges.get(i).get(j).setVal1(edges.get(i).get(j).getVal1() - 1);
+                }
+                else if (edges.get(i).get(j).getVal1().equals(index)) {
+                    edges.get(i).remove(j);
+                    if (j < edges.get(i).size()) {
+                        j--;
+                    }
+                }
+            }
+
+        }
+
+    }
 	
 	public boolean removeEdge(T node1, T node2) {
 		

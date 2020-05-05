@@ -29,4 +29,10 @@ public class Tuple <T1, T2>{
 		this.val2 = val2;
 	}
 	
+	public String toString() {
+		
+		return val1 + " and " + val2;
+		
+	}
+	
 }

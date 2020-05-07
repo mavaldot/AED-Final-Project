@@ -1,12 +1,8 @@
 package util;
-
 import java.util.ArrayList;
-
 import exception.LoopException;
 import exception.MultipleEdgesException;
 import exception.NodeNotFoundException;
-
-
 
 public class ListGraph<T>{
 	
@@ -230,9 +226,9 @@ public class ListGraph<T>{
 		return edges;
 	}
 	
-	public ListGraph<SearchNode<T>> BFS(T source) {
+	public ListGraph<SearchNode<T>> bfs(T source) {
 		
-		ListGraph<SearchNode<T>> BFSTree = new ListGraph<>(false, false, false);
+		ListGraph<SearchNode<T>> bfsTree = new ListGraph<>(false, false, false);
 		ArrayList<SearchNode<T>> sNodes = new ArrayList<>();
 		
 		for (T node : nodes) {
@@ -247,7 +243,7 @@ public class ListGraph<T>{
 		Queue<Integer> queue = new Queue<>();
 		queue.enqueue(nodes.indexOf(source));
 		
-		BFSTree.addNode(sNodes.get(nodes.indexOf(source)));
+		bfsTree.addNode(sNodes.get(nodes.indexOf(source)));
 		
 		while (queue.size() > 0) {
 			
@@ -261,7 +257,7 @@ public class ListGraph<T>{
 				
 				if (sNodes.get(v).getColor() == SearchNode.WHITE) {
 					
-					BFSTree.addNode(sNodes.get(v));
+					bfsTree.addNode(sNodes.get(v));
 					
 					sNodes.get(v).setColor(SearchNode.GRAY);
 					sNodes.get(v).setDistance(sNodes.get(u).getDistance() + 1);
@@ -276,7 +272,7 @@ public class ListGraph<T>{
 						}
 					}
 					
-					BFSTree.addEdge(sNodes.get(u), sNodes.get(v), minWeight);
+					bfsTree.addEdge(sNodes.get(u), sNodes.get(v), minWeight);
 				}
 			}
 			
@@ -284,11 +280,11 @@ public class ListGraph<T>{
 			
 		}
 		
-		return BFSTree;
+		return bfsTree;
 		
 	}
 	
-	public ListGraph<SearchNode<T>> DFS(){
+	public ListGraph<SearchNode<T>> dfs(){
 		ListGraph<SearchNode<T>> forest=new ListGraph<SearchNode<T>>(false, false, false);
 		for(T vertex: nodes) {
 			forest.addNode(new SearchNode<T>(vertex));
@@ -296,14 +292,14 @@ public class ListGraph<T>{
 		
 		for(SearchNode<T> vertex: forest.getNodes()) {
 			if(vertex.getColor() == SearchNode.WHITE){
-				DFSVisit(forest, vertex);
+				dfsVisit(forest, vertex);
 			}
 		}
 		
 		return forest;
 	}
 	
-	private void DFSVisit(ListGraph<SearchNode<T>> forest, SearchNode<T> vertex){
+	private void dfsVisit(ListGraph<SearchNode<T>> forest, SearchNode<T> vertex){
 		forest.time = forest.time + 1;
 		vertex.setDTimestamps(forest.time);
 		vertex.setColor(SearchNode.GRAY);
@@ -329,7 +325,7 @@ public class ListGraph<T>{
 					forest.addEdge(vertex, cVertex, info.getVal2());
 					
 					cVertex.setAncestor(vertex);
-					DFSVisit(forest, cVertex);
+					dfsVisit(forest, cVertex);
 				}
 			}
 			

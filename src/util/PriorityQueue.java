@@ -26,6 +26,7 @@ public class PriorityQueue<E> implements List<E>{
 	//Methods
 	public void enqueue(E element, int priority){
 		this.nodes.add(element);
+		this.priorities.add(priority);
 	}
 	
 	public void decreaseKey(E element, int priority) {
@@ -37,7 +38,6 @@ public class PriorityQueue<E> implements List<E>{
 	public E dequeue() {
 		int index = -1;
 		Integer m = null;
-		
 		
 		for(int i = 0; i < priorities.size(); i++){
 			if(type.equals(Priority.MIN)){
@@ -69,7 +69,7 @@ public class PriorityQueue<E> implements List<E>{
 		return node;
 	}
 	
-	public int peekPriory() {
+	public int peekPriority() {
 		return priorities.get(nodes.indexOf(peek()));
 	}
 	

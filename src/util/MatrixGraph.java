@@ -167,7 +167,7 @@ public class MatrixGraph<T> {
 		return tree;
 	}
 	
-	public MatrixGraph<SearchNode<T>> DFS() {
+	public MatrixGraph<SearchNode<T>> dfs() {
 		
 		MatrixGraph<SearchNode<T>> forest = new MatrixGraph<SearchNode<T>>(false, false, false);
 		
@@ -177,13 +177,13 @@ public class MatrixGraph<T> {
 		
 		for(SearchNode<T> v : forest.getNodes()) {
 			if(v.getColor() == SearchNode.WHITE)
-				DFSAux(forest, v);
+				dfsAux(forest, v);
 		}
 		
 		return forest;	
 	}
 	
-	private void DFSAux(MatrixGraph<SearchNode<T>> forest, SearchNode<T> node) {
+	private void dfsAux(MatrixGraph<SearchNode<T>> forest, SearchNode<T> node) {
 		
 		forest.setTime(forest.getTime()+1);
 		node.setDTimestamps(forest.getTime());
@@ -210,7 +210,7 @@ public class MatrixGraph<T> {
 					
 					forest.addEdge(node, e, weight);
 					e.setAncestor(node);
-					DFSAux(forest, e);
+					dfsAux(forest, e);
 				}
 			}
 		}
@@ -300,7 +300,7 @@ public class MatrixGraph<T> {
 		}
 		while(!queue.isEmpty()) {
 			
-			int weight = queue.peekPriory();
+			int weight = queue.peekPriority();
 			Tuple<SearchNode<T>, SearchNode<T>> edge = queue.dequeue();
 			
 			if(sets.union(edge.getVal1().getObject(), edge.getVal2().getObject())) {

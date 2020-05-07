@@ -17,8 +17,7 @@ public class DisjointSet<E> {
 		return representatives.get(new Node<E>(v));
 	}
 	
-	public boolean union(E a, E b) {
-		
+	public boolean union(E a, E b) {	
 		Node<E> nA = find(a);
 		Node<E> nB = find(b);
 		boolean joined = false;
@@ -29,15 +28,8 @@ public class DisjointSet<E> {
 					representatives.put(entry.getKey(), nA);
 				}
 			}
-			
 			joined = true;
 		}
 		return joined;
-	}
-	
-	public void print() {
-		for(HashMap.Entry<Node<E>, Node<E>> entry : representatives.entrySet()) {
-			System.out.println(entry.getKey().getElement() + " : " + entry.getValue().getElement());
-		}
 	}
 }

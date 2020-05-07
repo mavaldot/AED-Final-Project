@@ -263,40 +263,40 @@ class ListGraphTest {
 	}
 	
 	@Test
-	void testBFS1() {
+	void testbfs1() {
 		
 		setSimpleGraph();
 		lGraph.addEdge("Ariza", "Johan");
 		lGraph.addEdge("Johan", "Mateo");
 		lGraph.addEdge("Restrepo", "Johan");
 		
-		ListGraph<SearchNode<String>> BFSTree = lGraph.BFS("Ariza");
+		ListGraph<SearchNode<String>> bfsTree = lGraph.bfs("Ariza");
 		
-		assertEquals(BFSTree.getNode(0).getObject(), "Ariza");
-		assertEquals(BFSTree.getNode(1).getObject(), "Johan");
-		assertEquals(BFSTree.getNode(2).getObject(), "Mateo");
-		assertEquals(BFSTree.getNode(3).getObject(), "Restrepo");
+		assertEquals(bfsTree.getNode(0).getObject(), "Ariza");
+		assertEquals(bfsTree.getNode(1).getObject(), "Johan");
+		assertEquals(bfsTree.getNode(2).getObject(), "Mateo");
+		assertEquals(bfsTree.getNode(3).getObject(), "Restrepo");
 		
-		assertEquals(BFSTree.getEdges().get(0).get(0).getVal1().intValue(), 1);
-		assertEquals(BFSTree.getEdges().get(1).get(0).getVal1().intValue(), 0);
-		assertEquals(BFSTree.getEdges().get(1).get(1).getVal1().intValue(), 2);
-		assertEquals(BFSTree.getEdges().get(1).get(2).getVal1().intValue(), 3);
-		assertEquals(BFSTree.getEdges().get(2).get(0).getVal1().intValue(), 1);
-		assertEquals(BFSTree.getEdges().get(3).get(0).getVal1().intValue(), 1);
+		assertEquals(bfsTree.getEdges().get(0).get(0).getVal1().intValue(), 1);
+		assertEquals(bfsTree.getEdges().get(1).get(0).getVal1().intValue(), 0);
+		assertEquals(bfsTree.getEdges().get(1).get(1).getVal1().intValue(), 2);
+		assertEquals(bfsTree.getEdges().get(1).get(2).getVal1().intValue(), 3);
+		assertEquals(bfsTree.getEdges().get(2).get(0).getVal1().intValue(), 1);
+		assertEquals(bfsTree.getEdges().get(3).get(0).getVal1().intValue(), 1);
 		
-		assertEquals(BFSTree.getNode(0).getDistance(), 0);
-		assertEquals(BFSTree.getNode(1).getDistance(), 1);
-		assertEquals(BFSTree.getNode(2).getDistance(), 2);
-		assertEquals(BFSTree.getNode(3).getDistance(), 2);
+		assertEquals(bfsTree.getNode(0).getDistance(), 0);
+		assertEquals(bfsTree.getNode(1).getDistance(), 1);
+		assertEquals(bfsTree.getNode(2).getDistance(), 2);
+		assertEquals(bfsTree.getNode(3).getDistance(), 2);
 	
-		assertEquals(BFSTree.getNode(0).getColor(), SearchNode.BLACK);
-		assertEquals(BFSTree.getNode(1).getColor(), SearchNode.BLACK);
-		assertEquals(BFSTree.getNode(2).getColor(), SearchNode.BLACK);
-		assertEquals(BFSTree.getNode(3).getColor(), SearchNode.BLACK);
+		assertEquals(bfsTree.getNode(0).getColor(), SearchNode.BLACK);
+		assertEquals(bfsTree.getNode(1).getColor(), SearchNode.BLACK);
+		assertEquals(bfsTree.getNode(2).getColor(), SearchNode.BLACK);
+		assertEquals(bfsTree.getNode(3).getColor(), SearchNode.BLACK);
 	}
 	
 	@Test
-	void testBFS2() {
+	void testbfs2() {
 		
 		setUpSceneMultiDirectedGraph();
 		lGraph.addEdge("Ariza", "Ariza", 3);
@@ -306,42 +306,42 @@ class ListGraphTest {
 		lGraph.addEdge("Johan", "Restrepo", 2);
 		lGraph.addEdge("Mateo", "Restrepo", 2);
 	
-		ListGraph<SearchNode<String>> BFSTree = lGraph.BFS("Ariza");
+		ListGraph<SearchNode<String>> bfsTree = lGraph.bfs("Ariza");
 		
-		assertEquals(BFSTree.getNode(0).getObject(), "Ariza");
-		assertEquals(BFSTree.getNode(1).getObject(), "Johan");
-		assertEquals(BFSTree.getNode(2).getObject(), "Mateo");
-		assertEquals(BFSTree.getNode(3).getObject(), "Restrepo");
+		assertEquals(bfsTree.getNode(0).getObject(), "Ariza");
+		assertEquals(bfsTree.getNode(1).getObject(), "Johan");
+		assertEquals(bfsTree.getNode(2).getObject(), "Mateo");
+		assertEquals(bfsTree.getNode(3).getObject(), "Restrepo");
 		
-		assertEquals(BFSTree.getEdges().get(0).get(0).getVal1().intValue(), 1);
-		assertEquals(BFSTree.getEdges().get(1).get(0).getVal1().intValue(), 0);
-		assertEquals(BFSTree.getEdges().get(1).get(1).getVal1().intValue(), 2);
-		assertEquals(BFSTree.getEdges().get(1).get(2).getVal1().intValue(), 3);
+		assertEquals(bfsTree.getEdges().get(0).get(0).getVal1().intValue(), 1);
+		assertEquals(bfsTree.getEdges().get(1).get(0).getVal1().intValue(), 0);
+		assertEquals(bfsTree.getEdges().get(1).get(1).getVal1().intValue(), 2);
+		assertEquals(bfsTree.getEdges().get(1).get(2).getVal1().intValue(), 3);
 		
-		assertEquals(BFSTree.getNode(0).getDistance(), 0);
-		assertEquals(BFSTree.getNode(1).getDistance(), 1);
-		assertEquals(BFSTree.getNode(2).getDistance(), 2);
-		assertEquals(BFSTree.getNode(3).getDistance(), 2);
+		assertEquals(bfsTree.getNode(0).getDistance(), 0);
+		assertEquals(bfsTree.getNode(1).getDistance(), 1);
+		assertEquals(bfsTree.getNode(2).getDistance(), 2);
+		assertEquals(bfsTree.getNode(3).getDistance(), 2);
 	
-		assertEquals(BFSTree.getNode(0).getColor(), SearchNode.BLACK);
-		assertEquals(BFSTree.getNode(1).getColor(), SearchNode.BLACK);
-		assertEquals(BFSTree.getNode(2).getColor(), SearchNode.BLACK);
-		assertEquals(BFSTree.getNode(3).getColor(), SearchNode.BLACK);
+		assertEquals(bfsTree.getNode(0).getColor(), SearchNode.BLACK);
+		assertEquals(bfsTree.getNode(1).getColor(), SearchNode.BLACK);
+		assertEquals(bfsTree.getNode(2).getColor(), SearchNode.BLACK);
+		assertEquals(bfsTree.getNode(3).getColor(), SearchNode.BLACK);
 		
-		assertEquals(BFSTree.getEdges().get(0).get(0).getVal2().intValue(), 1);
-		assertEquals(BFSTree.getEdges().get(1).get(0).getVal2().intValue(), 1);
-		assertEquals(BFSTree.getEdges().get(3).get(0).getVal2().intValue(), 2);
+		assertEquals(bfsTree.getEdges().get(0).get(0).getVal2().intValue(), 1);
+		assertEquals(bfsTree.getEdges().get(1).get(0).getVal2().intValue(), 1);
+		assertEquals(bfsTree.getEdges().get(3).get(0).getVal2().intValue(), 2);
 		
 	}
 	
 	@Test
-	void testDFS() {
+	void testdfs() {
 		//Simple Graph
 		setSimpleGraph();
 		lGraph.addEdge("Ariza", "Johan", 2);
 		lGraph.addEdge("Johan", "Mateo", 1);
 		
-		ListGraph<SearchNode<String>> forest = lGraph.DFS();
+		ListGraph<SearchNode<String>> forest = lGraph.dfs();
 		
 		assertEquals(forest.getNode(0).getColor(), SearchNode.BLACK);
 		assertEquals(forest.getNode(0).getTimestamps().getVal1().intValue(), 1);
@@ -381,7 +381,7 @@ class ListGraphTest {
 		lGraph.addEdge("Ariza", "Johan", 1);
 		lGraph.addEdge("Johan", "Mateo", 1);
 		
-		forest = lGraph.DFS();
+		forest = lGraph.dfs();
 		
 		assertEquals(forest.getNode(0).getColor(), SearchNode.BLACK);
 		assertEquals(forest.getNode(0).getTimestamps().getVal1().intValue(), 1);

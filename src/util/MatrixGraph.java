@@ -9,7 +9,7 @@ import util.PriorityQueue.Priority;
 
 public class MatrixGraph<T> {
 
-	private ArrayList<T> nodes;
+	private ArrayList<T> vertices;
 	private ArrayList<ArrayList<ArrayList<Integer>>> edges;
 	public boolean directed;
 	private boolean multipleEdges;
@@ -22,15 +22,15 @@ public class MatrixGraph<T> {
 		this.multipleEdges=multipleEdges;
 		this.loop=loop;
 		
-		time = 0;
-		nodes = new ArrayList<T>();
-		edges = new ArrayList<ArrayList<ArrayList<Integer>>>();
+		this.time = 0;
+		this.vertices = new ArrayList<T>();
+		this.edges = new ArrayList<ArrayList<ArrayList<Integer>>>();
 		
 	}
 	
-	public void addNode(T node) {
+	public void addVertex(T node) {
 		
-		nodes.add(node);
+		vertices.add(node);
 		
 		edges.add(new ArrayList<ArrayList<Integer>>());
 		
@@ -44,8 +44,8 @@ public class MatrixGraph<T> {
 	
 	public void addEdge(T nodeF, T nodeC, int weight) {
 		
-		int row = nodes.indexOf(nodeF);
-		int column = nodes.indexOf(nodeC);
+		int row = vertices.indexOf(nodeF);
+		int column = vertices.indexOf(nodeC);
 		
 		if((row == -1) || (column == -1)){
 			throw new NodeNotFoundException();
@@ -69,12 +69,12 @@ public class MatrixGraph<T> {
 		
 	}
 	
-	public void removeNode(T node){
+	public void removeVertex(T node){
 		
-		int index = nodes.indexOf(node);
+		int index = vertices.indexOf(node);
 		
 		if(index != -1) {
-			nodes.remove(index);
+			vertices.remove(index);
 			
 			edges.remove(index);
 			edges.forEach((n) -> n.remove(index));
@@ -87,8 +87,8 @@ public class MatrixGraph<T> {
 	
 	public void removeEdge(T nodeF, T nodeC, int weight){
 		
-		int row = nodes.indexOf(nodeF);
-		int column = nodes.indexOf(nodeC);
+		int row = vertices.indexOf(nodeF);
+		int column = vertices.indexOf(nodeC);
 		
 		if((row == -1) || (column == -1)){
 			throw new NodeNotFoundException();
@@ -113,29 +113,29 @@ public class MatrixGraph<T> {
 	
 	public MatrixGraph<SearchNode<T>> bfs(T node) {
 		MatrixGraph<SearchNode<T>> tree=new MatrixGraph<SearchNode<T>>(false, false, false);
-		for(T vertex: nodes) {
-			tree.addNode(new SearchNode<T>(vertex));
+		for(T vertex: vertices) {
+			tree.addVertex(new SearchNode<T>(vertex));
 		}
 		
-		int index = nodes.indexOf(node);
-		tree.getNode(index).setColor(SearchNode.GRAY);
-		tree.getNode(index).setDistance(0);
-		tree.getNode(index).setAncestor(null);
+		int index = vertices.indexOf(node);
+		tree.getVertex(index).setColor(SearchNode.GRAY);
+		tree.getVertex(index).setDistance(0);
+		tree.getVertex(index).setAncestor(null);
 		
 		Queue<SearchNode<T>> queue = new Queue<SearchNode<T>>();
-		queue.enqueue(tree.getNode(index));
+		queue.enqueue(tree.getVertex(index));
 		
 		while(!queue.isEmpty()) {
 			
 			SearchNode<T> element = queue.dequeue();
-			int eIndex = nodes.indexOf(element.getObject());
+			int eIndex = vertices.indexOf(element.getObject());
 			ArrayList<ArrayList<Integer>> eEdges=edges.get(eIndex);
 			
 			for(int i = 0; i < eEdges.size(); i++){
 				
 				if((eEdges.get(i).size() != 0) && (eIndex != i)){
 					
-					SearchNode<T> cElement = tree.getNode(i);
+					SearchNode<T> cElement = tree.getVertex(i);
 					
 					if(cElement.getColor() == SearchNode.WHITE) {
 						
@@ -171,11 +171,11 @@ public class MatrixGraph<T> {
 		
 		MatrixGraph<SearchNode<T>> forest = new MatrixGraph<SearchNode<T>>(false, false, false);
 		
-		for(T v : nodes) {
-			forest.addNode(new SearchNode<T>(v));
+		for(T v : vertices) {
+			forest.addVertex(new SearchNode<T>(v));
 		}
 		
-		for(SearchNode<T> v : forest.getNodes()) {
+		for(SearchNode<T> v : forest.getVertices()) {
 			if(v.getColor() == SearchNode.WHITE)
 				dfsAux(forest, v);
 		}
@@ -189,14 +189,14 @@ public class MatrixGraph<T> {
 		node.setDTimestamps(forest.getTime());
 		node.setColor(SearchNode.GRAY);
 		
-		int index = nodes.indexOf(node.getObject());
+		int index = vertices.indexOf(node.getObject());
 		ArrayList<ArrayList<Integer>> nodeEdges = edges.get(index);
 		
 		for(int i = 0; i < nodeEdges.size(); i++) {
 			
 			if(nodeEdges.get(i).size() != 0 && i != index) {
 				
-				SearchNode<T> e = forest.getNode(i);
+				SearchNode<T> e = forest.getVertex(i);
 				
 				if(e.getColor() == SearchNode.WHITE) {
 					
@@ -222,22 +222,22 @@ public class MatrixGraph<T> {
 	
 	public MatrixGraph<SearchNode<T>> prim(T node) {
 		MatrixGraph<SearchNode<T>> tree=new MatrixGraph<SearchNode<T>>(false, false, false);
-		for(T vertex: nodes) {
-			tree.addNode(new SearchNode<T>(vertex));
+		for(T vertex: vertices) {
+			tree.addVertex(new SearchNode<T>(vertex));
 		}
 		
-		int index = nodes.indexOf(node);
-		tree.getNode(index).setDistance(0);
+		int index = vertices.indexOf(node);
+		tree.getVertex(index).setDistance(0);
 		
 		PriorityQueue<SearchNode<T>> queue=new PriorityQueue<SearchNode<T>>(Priority.MIN);
-		for(SearchNode<T> vertex: tree.getNodes()) {
+		for(SearchNode<T> vertex: tree.getVertices()) {
 			queue.enqueue(vertex, vertex.getDistance());
 		}
 		
 		while(!queue.isEmpty()){
 			SearchNode<T> element = queue.dequeue();
 			
-			int eIndex = nodes.indexOf(element.getObject());
+			int eIndex = vertices.indexOf(element.getObject());
 			
 			for(int i = 0; i < edges.get(eIndex).size(); i++){
 				if(edges.get(eIndex).get(i).size() != 0){
@@ -249,15 +249,15 @@ public class MatrixGraph<T> {
 						}
 					}
 					
-					if((tree.getNode(i).getColor() == SearchNode.WHITE) && (edge < tree.getNode(i).getDistance())){
-						tree.getNode(i).setDistance(edge);
-						queue.decreaseKey(tree.getNode(i), edge);
-						tree.getNode(i).setAncestor(element);
+					if((tree.getVertex(i).getColor() == SearchNode.WHITE) && (edge < tree.getVertex(i).getDistance())){
+						tree.getVertex(i).setDistance(edge);
+						queue.decreaseKey(tree.getVertex(i), edge);
+						tree.getVertex(i).setAncestor(element);
 						for(int j = 0; j < tree.getEdges().get(i).size(); j++) {
 							tree.getEdges().get(i).get(j).clear();
 							tree.getEdges().get(j).get(i).clear();
 						}
-						tree.addEdge(element, tree.getNode(i), edge);
+						tree.addEdge(element, tree.getVertex(i), edge);
 					}
 					
 				}
@@ -275,9 +275,9 @@ public class MatrixGraph<T> {
 		MatrixGraph<SearchNode<T>> tree = new MatrixGraph<SearchNode<T>>(false, false, false);
 		DisjointSet<T> sets = new DisjointSet<>();
 		
-		for(T v : nodes) {
+		for(T v : vertices) {
 			sets.makeSet(v);
-			tree.addNode(new SearchNode<T>(v));
+			tree.addVertex(new SearchNode<T>(v));
 		}
 		
 		PriorityQueue<Tuple<SearchNode<T>, SearchNode<T>>> queue = new PriorityQueue<Tuple<SearchNode<T>, SearchNode<T>>>(Priority.MIN);
@@ -294,7 +294,7 @@ public class MatrixGraph<T> {
 						}
 					}
 					
-					queue.enqueue(new Tuple<SearchNode<T>, SearchNode<T>>(tree.getNode(i), tree.getNode(j)), edge);
+					queue.enqueue(new Tuple<SearchNode<T>, SearchNode<T>>(tree.getVertex(i), tree.getVertex(j)), edge);
 				}
 			}
 		}
@@ -312,16 +312,76 @@ public class MatrixGraph<T> {
 		return tree;
 	}
 	
-	public T getNode(int index){
-		return nodes.get(index);
+	public ArrayList<SearchNode<T>> dijkstra(T node){
+		ArrayList<SearchNode<T>> list = new ArrayList<SearchNode<T>>();
+		for(T vertex : vertices){
+			list.add(new SearchNode<T>(vertex));
+		}
+		
+		int index = vertices.indexOf(node);
+		
+		if(index != -1){
+			
+			list.get(index).setDistance(0);
+			
+			PriorityQueue<SearchNode<T>> queue = new PriorityQueue<SearchNode<T>>(Priority.MIN);
+			for(SearchNode<T> vertex : list){
+				queue.enqueue(vertex, vertex.getDistance());
+			}
+			
+			while(!queue.isEmpty()) {
+				SearchNode<T> actualVertex = queue.dequeue();
+				int actualIndex = vertices.indexOf(actualVertex.getObject());
+				
+				for(int i = 0; i < edges.get(actualIndex).size(); i++){
+					if(edges.get(actualIndex).get(i).size() > 0){
+						
+						int edge = Integer.MAX_VALUE;
+						for(Integer tEdge :edges.get(actualIndex).get(i)){
+							if(tEdge < edge){
+								edge = tEdge;
+							}
+						}
+						
+						int testDistance = actualVertex.getDistance() + edge;
+						if(testDistance < list.get(i).getDistance()){
+							list.get(i).setDistance(testDistance);
+							queue.decreaseKey(list.get(i), testDistance);
+							
+							list.get(i).setAncestor(actualVertex);
+						}
+						
+						
+					}
+				}
+				
+			}
+			
+		}
+		else{
+			//Error
+		}
+		
+		return list;
+	}
+	
+	public T getVertex(int index){
+		return vertices.get(index);
 	}
 	
 	public ArrayList<Integer> getEdge(int row, int column) {
 		return edges.get(row).get(column);
 	}
 	
-	public ArrayList<T> getNodes() {
-		return nodes;
+	public ArrayList<Integer> getEdge(T nodeF, T nodeC) {
+		int row = vertices.indexOf(nodeF);
+		int column = vertices.indexOf(nodeC);
+		
+		return edges.get(row).get(column);
+	}
+	
+	public ArrayList<T> getVertices() {
+		return vertices;
 	}
 
 	public ArrayList<ArrayList<ArrayList<Integer>>> getEdges() {

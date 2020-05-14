@@ -560,4 +560,57 @@ class MatrixGraphTest {
 		//...
 	}
 	
+	@Test
+	void testFloydWarshall() {
+		//Simple Graph
+		setUpSceneSimpleGraph3();
+		int[][] distances = matrixGraph.floydWarshall();
+		
+		assertEquals(distances[0][0], 0);
+		assertEquals(distances[0][1], 5);
+		assertEquals(distances[0][2], 2);
+		assertEquals(distances[0][3], 3);
+		
+		assertEquals(distances[1][0], 5);
+		assertEquals(distances[1][1], 0);
+		assertEquals(distances[1][2], 3);
+		assertEquals(distances[1][3], 4);
+		
+		assertEquals(distances[2][0], 2);
+		assertEquals(distances[2][1], 3);
+		assertEquals(distances[2][2], 0);
+		assertEquals(distances[2][3], 1);
+		
+		assertEquals(distances[3][0], 3);
+		assertEquals(distances[3][1], 4);
+		assertEquals(distances[3][2], 1);
+		assertEquals(distances[3][3], 0);
+		//...
+		
+		//Multi Directed Graph
+		setUpSceneMultiDirectedGraph2();
+		distances = matrixGraph.floydWarshall();
+		
+		assertEquals(distances[0][0], 0);
+		assertEquals(distances[0][1], 2);
+		assertEquals(distances[0][2], 3);
+		assertEquals(distances[0][3], Integer.MAX_VALUE);
+		
+		assertEquals(distances[1][0], 4);
+		assertEquals(distances[1][1], 0);
+		assertEquals(distances[1][2], 1);
+		assertEquals(distances[1][3], Integer.MAX_VALUE);
+		
+		assertEquals(distances[2][0], 3);
+		assertEquals(distances[2][1], 5);
+		assertEquals(distances[2][2], 0);
+		assertEquals(distances[2][3], Integer.MAX_VALUE);
+		
+		assertEquals(distances[3][0], Integer.MAX_VALUE);
+		assertEquals(distances[3][1], Integer.MAX_VALUE);
+		assertEquals(distances[3][2], Integer.MAX_VALUE);
+		assertEquals(distances[3][3], 0);
+		//...
+	}
+	
 }

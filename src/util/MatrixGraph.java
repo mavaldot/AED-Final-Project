@@ -365,6 +365,54 @@ public class MatrixGraph<T> {
 		return list;
 	}
 	
+	public int[][] floydWarshall(){
+		int[][] distances = new int[vertices.size()][vertices.size()];
+		
+		for(int i = 0; i < distances.length; i++) {
+			for(int j = 0; j < distances.length; j++){
+				
+				if(i == j){
+					distances[i][j] = 0;
+				}
+				else{
+					if(edges.get(i).get(j).size() != 0){
+						
+						int min = Integer.MAX_VALUE;
+						for(int value : edges.get(i).get(j)) {
+							if(value < min) {
+								min = value;
+							}
+						}
+						distances[i][j] = min;
+						
+					}
+					else {
+						distances[i][j] = Integer.MAX_VALUE;
+					}
+				}
+				
+			}
+		}
+		
+		for(int k = 0; k < distances.length; k++) {
+			
+			for(int i = 0; i < distances.length; i++) {
+				for(int j = 0; j < distances.length; j++) {
+					
+					if((distances[i][k] != Integer.MAX_VALUE) && (distances[k][j] != Integer.MAX_VALUE)) {
+						if((distances[i][k] + distances[k][j]) < distances[i][j]){
+							distances[i][j] = (distances[i][k] + distances[k][j]);
+						}
+					}
+					
+				}
+			}
+			
+		}
+		
+		return distances;
+	}
+	
 	public T getVertex(int index){
 		return vertices.get(index);
 	}

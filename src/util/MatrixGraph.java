@@ -9,13 +9,16 @@ import util.PriorityQueue.Priority;
 
 public class MatrixGraph<T> {
 
-	private ArrayList<T> vertices;
-	private ArrayList<ArrayList<ArrayList<Integer>>> edges;
+	//Attributes
 	public boolean directed;
 	private boolean multipleEdges;
 	private boolean loop;
+	
+	private ArrayList<T> vertices;
+	private ArrayList<ArrayList<ArrayList<Integer>>> edges;
 	private int time;
 	
+	//Constructor
 	public MatrixGraph(boolean directed, boolean multipleEdges, boolean loop) {
 		
 		this.directed=directed;
@@ -28,6 +31,8 @@ public class MatrixGraph<T> {
 		
 	}
 	
+	//Methods
+	//Add
 	public void addVertex(T node) {
 		
 		vertices.add(node);
@@ -69,6 +74,7 @@ public class MatrixGraph<T> {
 		
 	}
 	
+	//Remove
 	public void removeVertex(T node){
 		
 		int index = vertices.indexOf(node);
@@ -111,6 +117,7 @@ public class MatrixGraph<T> {
 		
 	}
 	
+	//Pro
 	public MatrixGraph<SearchNode<T>> bfs(T node) {
 		MatrixGraph<SearchNode<T>> tree=new MatrixGraph<SearchNode<T>>(false, false, false);
 		for(T vertex: vertices) {
@@ -413,6 +420,24 @@ public class MatrixGraph<T> {
 		return distances;
 	}
 	
+	//Set
+	public void setTime(int time) {
+		this.time = time;
+	}
+	
+	//Get
+	public boolean getDirected() {
+		return directed;
+	}
+	
+	public boolean getMultipleEdges() {
+		return multipleEdges;
+	}
+	
+	public boolean getLoop() {
+		return loop;
+	}
+	
 	public T getVertex(int index){
 		return vertices.get(index);
 	}
@@ -434,10 +459,6 @@ public class MatrixGraph<T> {
 
 	public ArrayList<ArrayList<ArrayList<Integer>>> getEdges() {
 		return edges;
-	}
-	
-	public void setTime(int time) {
-		this.time = time;
 	}
 	
 	public int getTime() {

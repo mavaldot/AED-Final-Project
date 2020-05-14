@@ -17,6 +17,7 @@ public class MatrixGraph<T> {
 	private ArrayList<T> vertices;
 	private ArrayList<ArrayList<ArrayList<Integer>>> edges;
 	private int time;
+	private int sets;
 	
 	//Constructor
 	public MatrixGraph(boolean directed, boolean multipleEdges, boolean loop) {
@@ -26,6 +27,7 @@ public class MatrixGraph<T> {
 		this.loop=loop;
 		
 		this.time = 0;
+		this.sets = 0;
 		this.vertices = new ArrayList<T>();
 		this.edges = new ArrayList<ArrayList<ArrayList<Integer>>>();
 		
@@ -315,7 +317,7 @@ public class MatrixGraph<T> {
 				tree.addEdge(edge.getVal1(), edge.getVal2(), weight);
 			}
 		}
-		
+		tree.setSets(sets.getSets());
 		return tree;
 	}
 	
@@ -428,6 +430,14 @@ public class MatrixGraph<T> {
 	//Get
 	public boolean getDirected() {
 		return directed;
+	}
+	
+	public int getSets() {
+		return sets;
+	}
+	
+	public void setSets(int sets) {
+		this.sets = sets;
 	}
 	
 	public boolean getMultipleEdges() {

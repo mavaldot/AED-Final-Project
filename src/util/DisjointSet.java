@@ -3,14 +3,17 @@ import java.util.HashMap;
 
 public class DisjointSet<E> {
 	
-	HashMap<Node<E>, Node<E>> representatives;
+	private HashMap<Node<E>, Node<E>> representatives;
+	private int sets;
 	
 	public DisjointSet() {
 		representatives = new HashMap<>();
+		sets = 0;
 	}
 	
 	public void makeSet(E v) {
 		representatives.put(new Node<E>(v), new Node<E>(v));
+		sets++;
 	}
 	
 	public Node<E> find(E v) {
@@ -29,7 +32,12 @@ public class DisjointSet<E> {
 				}
 			}
 			joined = true;
+			sets--;
 		}
 		return joined;
+	}
+	
+	public int getSets() {
+		return sets;
 	}
 }

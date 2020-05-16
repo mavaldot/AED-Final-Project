@@ -140,7 +140,7 @@ class MatrixGraphTest {
 	
 	//Test
 	@Test
-	void testAddNode() {
+	void testAddVertex() {
 		
 		setUpSceneSimpleGraphEmpty();
 		matrixGraph.addVertex("Johan");
@@ -209,7 +209,7 @@ class MatrixGraphTest {
 	}
 	
 	@Test
-	void testRemoveNode() {
+	void testRemoveVertex() {
 		
 		setUpSceneSimpleGraph();
 		matrixGraph.removeVertex(matrixGraph.getVertex(1));
@@ -340,7 +340,7 @@ class MatrixGraphTest {
 	}
 	
 	@Test
-	void testDFS() {
+	void testDfs() {
 		//Simple Graph
 		setUpSceneSimpleGraph2();
 		

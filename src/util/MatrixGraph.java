@@ -7,7 +7,7 @@ import exception.MultipleEdgesException;
 import exception.NodeNotFoundException;
 import util.PriorityQueue.Priority;
 
-public class MatrixGraph<T> implements InterfaceGraph<MatrixGraph<SearchNode<T>>, T>{
+public class MatrixGraph<T> implements InterfaceGraph<MatrixGraph<SearchNode<T>>, T, ArrayList<Integer>>{
 
 	//Attributes
 	public boolean directed;
@@ -474,4 +474,5 @@ public class MatrixGraph<T> implements InterfaceGraph<MatrixGraph<SearchNode<T>>
 	public int getTime() {
 		return time;
 	}
+	
 }

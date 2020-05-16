@@ -12,7 +12,7 @@ import util.MatrixGraph;
 public class Manager {
 	
 	//Constant
-	public final static String LEVEL_EXTENCION = "lvl";
+	public final static String LEVEL_EXTENSION = "lvl";
 	public final static String WORLD_DATA = "world.wrd";
 	
 	//Attributes
@@ -33,7 +33,7 @@ public class Manager {
 			
 			File[] levelsFiles = new File(url).listFiles();
 			for(File level: levelsFiles) {
-				if(level.getName().substring(level.getName().lastIndexOf(".")).equals(LEVEL_EXTENCION)) {
+				if(level.getName().substring(level.getName().lastIndexOf(".")).equals(LEVEL_EXTENSION)) {
 					try{
 						
 						String[] levelData = readFile(level.getPath()).split("\n");
@@ -83,7 +83,8 @@ public class Manager {
 			
 			File[] levelsFiles = new File(url).listFiles();
 			for(File level: levelsFiles) {
-				if(level.getName().substring(level.getName().lastIndexOf(".")).equals(LEVEL_EXTENCION)) {
+				String ext = level.getName().substring(level.getName().length()-3, level.getName().length());
+				if(ext.equals(LEVEL_EXTENSION)) {
 					try{
 						
 						String[] levelData = readFile(level.getPath()).split("\n");
@@ -154,6 +155,11 @@ public class Manager {
 		}
 		
 		return text;
+	}
+	
+	//Get
+	public World getWorld() {
+		return world;
 	}
 	
 }

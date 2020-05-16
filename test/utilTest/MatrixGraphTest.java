@@ -1,4 +1,4 @@
-package util;
+package utilTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,6 +10,7 @@ import exception.LoopException;
 import exception.MultipleEdgesException;
 import exception.NodeNotFoundException;
 import util.MatrixGraph;
+import util.SearchNode;
 
 class MatrixGraphTest {
 

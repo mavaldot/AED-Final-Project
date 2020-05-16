@@ -1,6 +1,9 @@
 package model;
 
+import exception.ImpossibleException;
+import exception.MultipleEdgesException;
 import util.MatrixGraph;
+import util.SearchNode;
 
 public class Level implements Comparable<Level>{
 	
@@ -32,13 +35,18 @@ public class Level implements Comparable<Level>{
 		this.end = end;
 		this.player = start;
 		if(!graph.getMultipleEdges()){
-			this.graph = graph;
+			if(checkPlayable(graph, start, end)){
+				this.graph = graph;
+			}
+			else {
+				throw new ImpossibleException();
+			}
 		}
 		else {
-			//Error
+			throw new MultipleEdgesException();
 		}
 		
-		this.movements = minMovements();
+		this.movements = maxMovements();
 		this.stars = stars;
 		
 	}
@@ -48,10 +56,12 @@ public class Level implements Comparable<Level>{
 		boolean possible = false;
 		
 		if(graph.getEdge(player, position).size() != 0) {
-			possible = true;
-			
-			this.player = position;
-			this.movements -= graph.getEdge(player, position).get(0);
+			if(graph.getEdge(player, position).get(0) <= movements) {
+				possible = true;
+				
+				this.movements -= graph.getEdge(player, position).get(0);
+				this.player = position;
+			}
 		}
 		
 		return possible;
@@ -98,6 +108,10 @@ public class Level implements Comparable<Level>{
 		return minMovements() + 2;
 	}
 	
+	public static boolean checkPlayable(MatrixGraph<Node> graph, int start, int end) {
+		return SearchNode.WHITE != graph.bfs(graph.getVertex(start)).getVertex(end).getColor();
+	}
+	
 	//Compare
 	public int compareTo(Level level) {
 		return this.unlock - level.unlock;
@@ -114,6 +128,26 @@ public class Level implements Comparable<Level>{
 	
 	public Color getColor() {
 		return color;
+	}
+	
+	public int getStart() {
+		return start;
+	}
+	
+	public int getEnd() {
+		return end;
+	}
+	
+	public int getPlayer() {
+		return  player;
+	}
+	
+	public MatrixGraph<Node> getGraph() {
+		return graph;
+	}
+	
+	public int getMovements() {
+		return movements;
 	}
 	
 	public int getStars() {

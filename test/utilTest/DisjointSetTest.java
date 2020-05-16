@@ -1,7 +1,9 @@
-package util;
+package utilTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+
+import util.DisjointSet;
 
 class DisjointSetTest {
 	

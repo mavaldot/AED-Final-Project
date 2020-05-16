@@ -5,7 +5,7 @@ import exception.MultipleEdgesException;
 import exception.NodeNotFoundException;
 import util.PriorityQueue.Priority;
 
-public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>{
+public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T, Tuple<Integer, Integer>>{
 	
 	private ArrayList<T> nodes;
 	private ArrayList<ArrayList<Tuple<Integer, Integer>>> edges;
@@ -28,6 +28,18 @@ public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>
 	public void addVertex(T node) {
 		nodes.add(node);
 		edges.add(new ArrayList<>());
+		
+	}
+	
+	public int verticesSize() {
+		
+		return nodes.size();
+		
+	}
+	
+	public int edgesSize() {
+		
+		return edges.size();
 		
 	}
 	
@@ -230,7 +242,7 @@ public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>
 		
 	}
 	
-	public T getNode(int index) {
+	public T getVertex(int index) {
 		
 		return nodes.get(index);
 		
@@ -258,7 +270,7 @@ public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>
 		
 	}
 	
-	public ArrayList<T> getNodes() {
+	public ArrayList<T> getVertices() {
 		return nodes;
 	}
 
@@ -330,7 +342,7 @@ public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>
 			forest.addVertex(new SearchNode<T>(vertex));
 		}
 		
-		for(SearchNode<T> vertex: forest.getNodes()) {
+		for(SearchNode<T> vertex: forest.getVertices()) {
 			if(vertex.getColor() == SearchNode.WHITE){
 				dfsVisit(forest, vertex);
 			}
@@ -347,7 +359,7 @@ public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>
 		int index = nodes.indexOf(vertex.getObject());
 		ArrayList<Tuple<Integer, Integer>> adj=edges.get(index);
 		
-		for(int i = 0; i < forest.getNodes().size(); i++){
+		for(int i = 0; i < forest.getVertices().size(); i++){
 			
 			Tuple<Integer, Integer> info = null;
 			
@@ -360,7 +372,7 @@ public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>
 			}
 			
 			if(info != null){
-				SearchNode<T> cVertex = forest.getNode(info.getVal1());
+				SearchNode<T> cVertex = forest.getVertex(info.getVal1());
 				if(cVertex.getColor() == SearchNode.WHITE) {
 					forest.addEdge(vertex, cVertex, info.getVal2());
 					
@@ -449,7 +461,7 @@ public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>
 				int node2index = edge.getVal1();
 				
 				if (node2index > i) {
-					queue.enqueue(new Tuple<SearchNode<T>, SearchNode<T>>(tree.getNode(i), tree.getNode(node2index)), edge.getVal2());
+					queue.enqueue(new Tuple<SearchNode<T>, SearchNode<T>>(tree.getVertex(i), tree.getVertex(node2index)), edge.getVal2());
 				}
 				
 			}

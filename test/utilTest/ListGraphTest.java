@@ -1,4 +1,4 @@
-package util;
+package utilTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import exception.LoopException;
 import exception.MultipleEdgesException;
 import util.ListGraph;
+import util.SearchNode;
+import util.Tuple;
 
 class ListGraphTest {
 
@@ -67,10 +69,10 @@ class ListGraphTest {
 	void testAddNode1() {
 		
 		setSimpleGraph();	
-		assertEquals(lGraph.getNode(0), "Ariza");
-		assertEquals(lGraph.getNode(1), "Johan");
-		assertEquals(lGraph.getNode(2), "Mateo");
-		assertEquals(lGraph.getNode(3), "Restrepo");
+		assertEquals(lGraph.getVertex(0), "Ariza");
+		assertEquals(lGraph.getVertex(1), "Johan");
+		assertEquals(lGraph.getVertex(2), "Mateo");
+		assertEquals(lGraph.getVertex(3), "Restrepo");
 		
 	}
 	
@@ -207,8 +209,8 @@ class ListGraphTest {
 		lGraph.addEdge("Restrepo", "Johan");
 		lGraph.removeVertex("Ariza");
 		lGraph.removeVertex("Mateo");
-		assertEquals(lGraph.getNode(0), "Johan");
-		assertEquals(lGraph.getNode(1), "Restrepo");
+		assertEquals(lGraph.getVertex(0), "Johan");
+		assertEquals(lGraph.getVertex(1), "Restrepo");
 		assertEquals(lGraph.getEdges().get(0).get(0).getVal1().intValue(), 1);
 		assertEquals(lGraph.getEdges().get(1).get(0).getVal1().intValue(), 0);
 //		System.out.println(lGraph.getEdges());
@@ -238,10 +240,10 @@ class ListGraphTest {
 	void testGetNode() {
 		
 		setSimpleGraph();
-		assertEquals(lGraph.getNode(0), "Ariza");
-		assertEquals(lGraph.getNode(1), "Johan");
-		assertEquals(lGraph.getNode(2), "Mateo");
-		assertEquals(lGraph.getNode(3), "Restrepo");
+		assertEquals(lGraph.getVertex(0), "Ariza");
+		assertEquals(lGraph.getVertex(1), "Johan");
+		assertEquals(lGraph.getVertex(2), "Mateo");
+		assertEquals(lGraph.getVertex(3), "Restrepo");
 		
 	}
 	
@@ -272,10 +274,10 @@ class ListGraphTest {
 		
 		ListGraph<SearchNode<String>> bfsTree = lGraph.bfs("Ariza");
 		
-		assertEquals(bfsTree.getNode(0).getObject(), "Ariza");
-		assertEquals(bfsTree.getNode(1).getObject(), "Johan");
-		assertEquals(bfsTree.getNode(2).getObject(), "Mateo");
-		assertEquals(bfsTree.getNode(3).getObject(), "Restrepo");
+		assertEquals(bfsTree.getVertex(0).getObject(), "Ariza");
+		assertEquals(bfsTree.getVertex(1).getObject(), "Johan");
+		assertEquals(bfsTree.getVertex(2).getObject(), "Mateo");
+		assertEquals(bfsTree.getVertex(3).getObject(), "Restrepo");
 		
 		assertEquals(bfsTree.getEdges().get(0).get(0).getVal1().intValue(), 1);
 		assertEquals(bfsTree.getEdges().get(1).get(0).getVal1().intValue(), 0);
@@ -284,15 +286,15 @@ class ListGraphTest {
 		assertEquals(bfsTree.getEdges().get(2).get(0).getVal1().intValue(), 1);
 		assertEquals(bfsTree.getEdges().get(3).get(0).getVal1().intValue(), 1);
 		
-		assertEquals(bfsTree.getNode(0).getDistance(), 0);
-		assertEquals(bfsTree.getNode(1).getDistance(), 1);
-		assertEquals(bfsTree.getNode(2).getDistance(), 2);
-		assertEquals(bfsTree.getNode(3).getDistance(), 2);
+		assertEquals(bfsTree.getVertex(0).getDistance(), 0);
+		assertEquals(bfsTree.getVertex(1).getDistance(), 1);
+		assertEquals(bfsTree.getVertex(2).getDistance(), 2);
+		assertEquals(bfsTree.getVertex(3).getDistance(), 2);
 	
-		assertEquals(bfsTree.getNode(0).getColor(), SearchNode.BLACK);
-		assertEquals(bfsTree.getNode(1).getColor(), SearchNode.BLACK);
-		assertEquals(bfsTree.getNode(2).getColor(), SearchNode.BLACK);
-		assertEquals(bfsTree.getNode(3).getColor(), SearchNode.BLACK);
+		assertEquals(bfsTree.getVertex(0).getColor(), SearchNode.BLACK);
+		assertEquals(bfsTree.getVertex(1).getColor(), SearchNode.BLACK);
+		assertEquals(bfsTree.getVertex(2).getColor(), SearchNode.BLACK);
+		assertEquals(bfsTree.getVertex(3).getColor(), SearchNode.BLACK);
 	}
 	
 	@Test
@@ -308,25 +310,25 @@ class ListGraphTest {
 	
 		ListGraph<SearchNode<String>> bfsTree = lGraph.bfs("Ariza");
 		
-		assertEquals(bfsTree.getNode(0).getObject(), "Ariza");
-		assertEquals(bfsTree.getNode(1).getObject(), "Johan");
-		assertEquals(bfsTree.getNode(2).getObject(), "Mateo");
-		assertEquals(bfsTree.getNode(3).getObject(), "Restrepo");
+		assertEquals(bfsTree.getVertex(0).getObject(), "Ariza");
+		assertEquals(bfsTree.getVertex(1).getObject(), "Johan");
+		assertEquals(bfsTree.getVertex(2).getObject(), "Mateo");
+		assertEquals(bfsTree.getVertex(3).getObject(), "Restrepo");
 		
 		assertEquals(bfsTree.getEdges().get(0).get(0).getVal1().intValue(), 1);
 		assertEquals(bfsTree.getEdges().get(1).get(0).getVal1().intValue(), 0);
 		assertEquals(bfsTree.getEdges().get(1).get(1).getVal1().intValue(), 2);
 		assertEquals(bfsTree.getEdges().get(1).get(2).getVal1().intValue(), 3);
 		
-		assertEquals(bfsTree.getNode(0).getDistance(), 0);
-		assertEquals(bfsTree.getNode(1).getDistance(), 1);
-		assertEquals(bfsTree.getNode(2).getDistance(), 2);
-		assertEquals(bfsTree.getNode(3).getDistance(), 2);
+		assertEquals(bfsTree.getVertex(0).getDistance(), 0);
+		assertEquals(bfsTree.getVertex(1).getDistance(), 1);
+		assertEquals(bfsTree.getVertex(2).getDistance(), 2);
+		assertEquals(bfsTree.getVertex(3).getDistance(), 2);
 	
-		assertEquals(bfsTree.getNode(0).getColor(), SearchNode.BLACK);
-		assertEquals(bfsTree.getNode(1).getColor(), SearchNode.BLACK);
-		assertEquals(bfsTree.getNode(2).getColor(), SearchNode.BLACK);
-		assertEquals(bfsTree.getNode(3).getColor(), SearchNode.BLACK);
+		assertEquals(bfsTree.getVertex(0).getColor(), SearchNode.BLACK);
+		assertEquals(bfsTree.getVertex(1).getColor(), SearchNode.BLACK);
+		assertEquals(bfsTree.getVertex(2).getColor(), SearchNode.BLACK);
+		assertEquals(bfsTree.getVertex(3).getColor(), SearchNode.BLACK);
 		
 		assertEquals(bfsTree.getEdges().get(0).get(0).getVal2().intValue(), 1);
 		assertEquals(bfsTree.getEdges().get(1).get(0).getVal2().intValue(), 1);
@@ -343,35 +345,35 @@ class ListGraphTest {
 		
 		ListGraph<SearchNode<String>> forest = lGraph.dfs();
 		
-		assertEquals(forest.getNode(0).getColor(), SearchNode.BLACK);
-		assertEquals(forest.getNode(0).getTimestamps().getVal1().intValue(), 1);
-		assertEquals(forest.getNode(0).getTimestamps().getVal2().intValue(), 6);
-		assertNull(forest.getNode(0).getAncestor());
+		assertEquals(forest.getVertex(0).getColor(), SearchNode.BLACK);
+		assertEquals(forest.getVertex(0).getTimestamps().getVal1().intValue(), 1);
+		assertEquals(forest.getVertex(0).getTimestamps().getVal2().intValue(), 6);
+		assertNull(forest.getVertex(0).getAncestor());
 		
 		assertEquals(forest.getEdges().get(0).get(0).getVal1().intValue(), 1);
 		assertEquals(forest.getEdges().get(0).get(0).getVal2().intValue(), 2);
 		assertEquals(forest.getEdges().get(1).get(0).getVal1().intValue(), 0);
 		assertEquals(forest.getEdges().get(1).get(0).getVal2().intValue(), 2);
 		
-		assertEquals(forest.getNode(1).getColor(), SearchNode.BLACK);
-		assertEquals(forest.getNode(1).getTimestamps().getVal1().intValue(), 2);
-		assertEquals(forest.getNode(1).getTimestamps().getVal2().intValue(), 5);
-		assertEquals(forest.getNode(1).getAncestor(), forest.getNode(0));
+		assertEquals(forest.getVertex(1).getColor(), SearchNode.BLACK);
+		assertEquals(forest.getVertex(1).getTimestamps().getVal1().intValue(), 2);
+		assertEquals(forest.getVertex(1).getTimestamps().getVal2().intValue(), 5);
+		assertEquals(forest.getVertex(1).getAncestor(), forest.getVertex(0));
 		
 		assertEquals(forest.getEdges().get(1).get(1).getVal1().intValue(), 2);
 		assertEquals(forest.getEdges().get(1).get(1).getVal2().intValue(), 1);
 		assertEquals(forest.getEdges().get(2).get(0).getVal1().intValue(), 1);
 		assertEquals(forest.getEdges().get(2).get(0).getVal2().intValue(), 1);
 		
-		assertEquals(forest.getNode(2).getColor(), SearchNode.BLACK);
-		assertEquals(forest.getNode(2).getTimestamps().getVal1().intValue(), 3);
-		assertEquals(forest.getNode(2).getTimestamps().getVal2().intValue(), 4);
-		assertEquals(forest.getNode(2).getAncestor(), forest.getNode(1));
+		assertEquals(forest.getVertex(2).getColor(), SearchNode.BLACK);
+		assertEquals(forest.getVertex(2).getTimestamps().getVal1().intValue(), 3);
+		assertEquals(forest.getVertex(2).getTimestamps().getVal2().intValue(), 4);
+		assertEquals(forest.getVertex(2).getAncestor(), forest.getVertex(1));
 		
-		assertEquals(forest.getNode(3).getColor(), SearchNode.BLACK);
-		assertEquals(forest.getNode(3).getTimestamps().getVal1().intValue(), 7);
-		assertEquals(forest.getNode(3).getTimestamps().getVal2().intValue(), 8);
-		assertNull(forest.getNode(3).getAncestor());
+		assertEquals(forest.getVertex(3).getColor(), SearchNode.BLACK);
+		assertEquals(forest.getVertex(3).getTimestamps().getVal1().intValue(), 7);
+		assertEquals(forest.getVertex(3).getTimestamps().getVal2().intValue(), 8);
+		assertNull(forest.getVertex(3).getAncestor());
 		//...
 		
 		//MultiDirectedGraph
@@ -383,35 +385,35 @@ class ListGraphTest {
 		
 		forest = lGraph.dfs();
 		
-		assertEquals(forest.getNode(0).getColor(), SearchNode.BLACK);
-		assertEquals(forest.getNode(0).getTimestamps().getVal1().intValue(), 1);
-		assertEquals(forest.getNode(0).getTimestamps().getVal2().intValue(), 6);
-		assertNull(forest.getNode(0).getAncestor());
+		assertEquals(forest.getVertex(0).getColor(), SearchNode.BLACK);
+		assertEquals(forest.getVertex(0).getTimestamps().getVal1().intValue(), 1);
+		assertEquals(forest.getVertex(0).getTimestamps().getVal2().intValue(), 6);
+		assertNull(forest.getVertex(0).getAncestor());
 		
 		assertEquals(forest.getEdges().get(0).get(0).getVal1().intValue(), 1);
 		assertEquals(forest.getEdges().get(0).get(0).getVal2().intValue(), 1);
 		assertEquals(forest.getEdges().get(1).get(0).getVal1().intValue(), 0);
 		assertEquals(forest.getEdges().get(1).get(0).getVal2().intValue(), 1);
 		
-		assertEquals(forest.getNode(1).getColor(), SearchNode.BLACK);
-		assertEquals(forest.getNode(1).getTimestamps().getVal1().intValue(), 2);
-		assertEquals(forest.getNode(1).getTimestamps().getVal2().intValue(), 5);
-		assertEquals(forest.getNode(1).getAncestor(), forest.getNode(0));
+		assertEquals(forest.getVertex(1).getColor(), SearchNode.BLACK);
+		assertEquals(forest.getVertex(1).getTimestamps().getVal1().intValue(), 2);
+		assertEquals(forest.getVertex(1).getTimestamps().getVal2().intValue(), 5);
+		assertEquals(forest.getVertex(1).getAncestor(), forest.getVertex(0));
 		
 		assertEquals(forest.getEdges().get(1).get(1).getVal1().intValue(), 2);
 		assertEquals(forest.getEdges().get(1).get(1).getVal2().intValue(), 1);
 		assertEquals(forest.getEdges().get(2).get(0).getVal1().intValue(), 1);
 		assertEquals(forest.getEdges().get(2).get(0).getVal2().intValue(), 1);
 		
-		assertEquals(forest.getNode(2).getColor(), SearchNode.BLACK);
-		assertEquals(forest.getNode(2).getTimestamps().getVal1().intValue(), 3);
-		assertEquals(forest.getNode(2).getTimestamps().getVal2().intValue(), 4);
-		assertEquals(forest.getNode(2).getAncestor(), forest.getNode(1));
+		assertEquals(forest.getVertex(2).getColor(), SearchNode.BLACK);
+		assertEquals(forest.getVertex(2).getTimestamps().getVal1().intValue(), 3);
+		assertEquals(forest.getVertex(2).getTimestamps().getVal2().intValue(), 4);
+		assertEquals(forest.getVertex(2).getAncestor(), forest.getVertex(1));
 		
-		assertEquals(forest.getNode(3).getColor(), SearchNode.BLACK);
-		assertEquals(forest.getNode(3).getTimestamps().getVal1().intValue(), 7);
-		assertEquals(forest.getNode(3).getTimestamps().getVal2().intValue(), 8);
-		assertNull(forest.getNode(3).getAncestor());
+		assertEquals(forest.getVertex(3).getColor(), SearchNode.BLACK);
+		assertEquals(forest.getVertex(3).getTimestamps().getVal1().intValue(), 7);
+		assertEquals(forest.getVertex(3).getTimestamps().getVal2().intValue(), 8);
+		assertNull(forest.getVertex(3).getAncestor());
 		//...
 	}
 	
@@ -429,19 +431,19 @@ class ListGraphTest {
 		
 		ListGraph<SearchNode<String>> tree = lGraph.prim("Mateo");
 		
-		assertEquals(tree.getNode(0).getColor(), SearchNode.BLACK);
-		assertEquals(tree.getNode(1).getColor(), SearchNode.BLACK);
-		assertEquals(tree.getNode(2).getColor(), SearchNode.BLACK);
-		assertEquals(tree.getNode(3).getColor(), SearchNode.BLACK);
+		assertEquals(tree.getVertex(0).getColor(), SearchNode.BLACK);
+		assertEquals(tree.getVertex(1).getColor(), SearchNode.BLACK);
+		assertEquals(tree.getVertex(2).getColor(), SearchNode.BLACK);
+		assertEquals(tree.getVertex(3).getColor(), SearchNode.BLACK);
 		
-		assertEquals(tree.getNode(0).getObject(), "Mateo");
-		assertEquals(tree.getNode(1).getObject(), "Ariza");
-		assertEquals(tree.getNode(2).getObject(), "Restrepo");
-		assertEquals(tree.getNode(3).getObject(), "Johan");
+		assertEquals(tree.getVertex(0).getObject(), "Mateo");
+		assertEquals(tree.getVertex(1).getObject(), "Ariza");
+		assertEquals(tree.getVertex(2).getObject(), "Restrepo");
+		assertEquals(tree.getVertex(3).getObject(), "Johan");
 		
-		Tuple<Integer, Integer> edge1 = tree.getEdge(tree.getNode(0), tree.getNode(1));
-		Tuple<Integer, Integer> edge2 = tree.getEdge(tree.getNode(1), tree.getNode(2));
-		Tuple<Integer, Integer> edge3 = tree.getEdge(tree.getNode(2), tree.getNode(3));
+		Tuple<Integer, Integer> edge1 = tree.getEdge(tree.getVertex(0), tree.getVertex(1));
+		Tuple<Integer, Integer> edge2 = tree.getEdge(tree.getVertex(1), tree.getVertex(2));
+		Tuple<Integer, Integer> edge3 = tree.getEdge(tree.getVertex(2), tree.getVertex(3));
 		
 		assertEquals(edge1.getVal1().intValue(), 1);
 		assertEquals(edge1.getVal2().intValue(), 1);
@@ -466,14 +468,14 @@ class ListGraphTest {
 		
 		ListGraph<SearchNode<String>> tree = lGraph.kruskal();
 		
-		assertEquals(tree.getNode(0).getObject(), "Ariza");
-		assertEquals(tree.getNode(1).getObject(), "Johan");
-		assertEquals(tree.getNode(2).getObject(), "Mateo");
-		assertEquals(tree.getNode(3).getObject(), "Restrepo");
+		assertEquals(tree.getVertex(0).getObject(), "Ariza");
+		assertEquals(tree.getVertex(1).getObject(), "Johan");
+		assertEquals(tree.getVertex(2).getObject(), "Mateo");
+		assertEquals(tree.getVertex(3).getObject(), "Restrepo");
 		
-		Tuple<Integer, Integer> edge1 = tree.getEdge(tree.getNode(0), tree.getNode(3));
-		Tuple<Integer, Integer> edge2 = tree.getEdge(tree.getNode(0), tree.getNode(1));
-		Tuple<Integer, Integer> edge3 = tree.getEdge(tree.getNode(1), tree.getNode(2));
+		Tuple<Integer, Integer> edge1 = tree.getEdge(tree.getVertex(0), tree.getVertex(3));
+		Tuple<Integer, Integer> edge2 = tree.getEdge(tree.getVertex(0), tree.getVertex(1));
+		Tuple<Integer, Integer> edge3 = tree.getEdge(tree.getVertex(1), tree.getVertex(2));
 		
 		assertEquals(edge1.getVal2().intValue(), 3);
 		assertEquals(edge2.getVal2().intValue(), 5);

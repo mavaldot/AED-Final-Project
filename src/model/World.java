@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import exception.AlreadyExistException;
+
 public class World {
 
 	//Attributes
@@ -24,11 +26,9 @@ public class World {
 			levels.add(level);
 			Collections.sort(levels);
 		}
-	}
-	
-	//Get
-	public int getStars() {
-		return stars;
+		else {
+			throw new AlreadyExistException();
+		}
 	}
 	
 	//Search
@@ -46,6 +46,19 @@ public class World {
 		}
 		
 		return level;
+	}
+	
+	//Get
+	public String getName() {
+		return name;
+	}
+	
+	public int getStars() {
+		return stars;
+	}
+	
+	public ArrayList<Level> getLevels() {
+		return levels;
 	}
 	
 }

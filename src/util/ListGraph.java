@@ -3,8 +3,9 @@ import java.util.ArrayList;
 import exception.LoopException;
 import exception.MultipleEdgesException;
 import exception.NodeNotFoundException;
+import util.PriorityQueue.Priority;
 
-public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>{
+public class ListGraph<T>{
 	
 	private ArrayList<T> nodes;
 	private ArrayList<ArrayList<Tuple<Integer, Integer>>> edges;
@@ -24,7 +25,7 @@ public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>
 		
 	}
 	
-	public void addVertex(T node) {
+	public void addNode(T node) {
 		nodes.add(node);
 		edges.add(new ArrayList<>());
 		
@@ -123,7 +124,7 @@ public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>
 //		edges.remove(index);
 //	}
 	
-	public void removeVertex(T node){
+	public void removeNode(T node){
 
         int index = nodes.indexOf(node);
 
@@ -149,7 +150,48 @@ public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>
 
     }
 	
-	public void removeEdge(T node1, T node2, int weight) {//Revisar[MATEO]
+	public boolean removeEdge(T node1, T node2, int weight) {
+		
+		boolean deleted = false;
+		
+		int index1 = nodes.indexOf(node1);
+		int index2 = nodes.indexOf(node2);
+		
+		if (index1 == -1) throw new NodeNotFoundException("Could not find node #1");
+		if (index2 == -1) throw new NodeNotFoundException("Could not find node #2");
+		
+		ArrayList<Tuple<Integer, Integer>> list1 = edges.get(index1);
+		
+		for (int i = 0; i < list1.size() && !deleted; i++) {
+			
+			if (list1.get(i).getVal1().equals(index2) && list1.get(i).getVal2().equals(weight)) {
+				list1.remove(i);
+				deleted = true;
+			}
+			
+		}
+		
+		if (!direction) {
+			
+			boolean deleted2 = false;
+			
+			ArrayList<Tuple<Integer, Integer>> list2 = edges.get(index2);
+			
+			for (int i = 0; i < list2.size() && !deleted2; i++) {
+				
+				if (list2.get(i).getVal1().equals(index1) && list2.get(i).getVal2().equals(weight)) {
+					list2.remove(i);
+					deleted2 = true;
+				}
+			}
+			
+		}
+		
+		return deleted;
+		
+	}
+	
+	public boolean removeEdge(T node1, T node2) {
 		
 		boolean deleted = false;
 		
@@ -185,6 +227,8 @@ public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>
 			}
 			
 		}
+		
+		return deleted;
 		
 	}
 	
@@ -241,7 +285,7 @@ public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>
 		Queue<Integer> queue = new Queue<>();
 		queue.enqueue(nodes.indexOf(source));
 		
-		bfsTree.addVertex(sNodes.get(nodes.indexOf(source)));
+		bfsTree.addNode(sNodes.get(nodes.indexOf(source)));
 		
 		while (queue.size() > 0) {
 			
@@ -255,7 +299,7 @@ public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>
 				
 				if (sNodes.get(v).getColor() == SearchNode.WHITE) {
 					
-					bfsTree.addVertex(sNodes.get(v));
+					bfsTree.addNode(sNodes.get(v));
 					
 					sNodes.get(v).setColor(SearchNode.GRAY);
 					sNodes.get(v).setDistance(sNodes.get(u).getDistance() + 1);
@@ -285,7 +329,7 @@ public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>
 	public ListGraph<SearchNode<T>> dfs(){
 		ListGraph<SearchNode<T>> forest=new ListGraph<SearchNode<T>>(false, false, false);
 		for(T vertex: nodes) {
-			forest.addVertex(new SearchNode<T>(vertex));
+			forest.addNode(new SearchNode<T>(vertex));
 		}
 		
 		for(SearchNode<T> vertex: forest.getNodes()) {
@@ -333,29 +377,193 @@ public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>
 		forest.time = forest.time + 1;
 		vertex.setFTimestamps(forest.time);
 	}
-
-	@Override
-	public ListGraph<SearchNode<T>> prim(T node) {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public ListGraph<SearchNode<T>> prim(T source) {
+		
+		ListGraph<SearchNode<T>> tree = new ListGraph<>(false, false, false);
+		ArrayList<SearchNode<T>> sNodes = new ArrayList<>();
+		
+		for (T node : nodes) {
+			if (node.equals(source)) {
+				sNodes.add(new SearchNode<T>(node, SearchNode.GRAY, 0, null));
+			}
+			else {
+				sNodes.add(new SearchNode<T>(node));
+			}
+		}
+		
+		PriorityQueue<Integer> pQueue = new PriorityQueue<>(Priority.MIN);
+		
+		for (int i = 0; i  < sNodes.size(); i++) {
+			pQueue.enqueue(i, sNodes.get(i).getDistance());
+		}
+		
+		while (pQueue.size() > 0) {
+			
+			int u = pQueue.dequeue();
+			
+			ArrayList<Tuple<Integer, Integer>> adj = edges.get(u);
+			
+			for (Tuple<Integer, Integer> tuple : adj) {
+				
+				int v = tuple.getVal1();
+				int weight = tuple.getVal2();
+				
+				if (sNodes.get(v).getColor() == SearchNode.WHITE && weight < sNodes.get(v).getDistance()) {
+					sNodes.get(v).setDistance(weight);
+					pQueue.decreaseKey(v, weight);
+					sNodes.get(v).setAncestor(sNodes.get(u));
+				}
+				
+			}
+			
+			tree.addNode(sNodes.get(u));
+			SearchNode<T> pred = sNodes.get(u).getAncestor();
+			
+			if (pred != null) {
+				tree.addEdge(sNodes.get(u), pred, sNodes.get(u).getDistance());
+			}
+			
+			sNodes.get(u).setColor(SearchNode.BLACK);
+		}
+		
+		return tree;
+		
 	}
-
-	@Override
+	
 	public ListGraph<SearchNode<T>> kruskal() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		ListGraph<SearchNode<T>> tree = new ListGraph<>(false, false, false);
+		DisjointSet<T> sets = new DisjointSet<>();
+		
+		for(T node : nodes) {
+			sets.makeSet(node);
+			tree.addNode(new SearchNode<T>(node));
+		}
+		
+		PriorityQueue<Tuple<SearchNode<T>, SearchNode<T>>> queue = new PriorityQueue<>(Priority.MIN);
+		
+		for (int i = 0; i < edges.size(); i++) {
+			
+			for (Tuple<Integer, Integer> edge : edges.get(i)) {
+				
+				int weight = Integer.MAX_VALUE;
+				int node2index = edge.getVal1();
+				
+				if (node2index > i) {
+					queue.enqueue(new Tuple<SearchNode<T>, SearchNode<T>>(tree.getNode(i), tree.getNode(node2index)), edge.getVal2());
+				}
+				
+			}
+		}
+		
+		while (!queue.isEmpty()) {
+			
+			int weight = queue.peekPriority();
+			Tuple<SearchNode<T>, SearchNode<T>> edge = queue.dequeue();
+			
+			if(sets.union(edge.getVal1().getObject(), edge.getVal2().getObject())) {
+				tree.addEdge(edge.getVal1(), edge.getVal2(), weight);
+			}
+		}
+		
+		return tree;
 	}
-
-	@Override
-	public ArrayList<SearchNode<T>> dijkstra(T node) {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public ArrayList<SearchNode<T>> djikstra(T source) {
+		
+		int srcindex = nodes.indexOf(source);
+		
+		if (srcindex == -1) throw new NodeNotFoundException("Could not find the source node");
+		
+		ArrayList<SearchNode<T>> list = new ArrayList<>();
+		PriorityQueue<Integer> queue = new PriorityQueue<>(Priority.MIN); 
+		
+		for (int i = 0; i < nodes.size(); i++) {
+			
+			if (i == srcindex) {
+				list.add(new SearchNode<T>(source, 0, 0, null));
+				queue.enqueue(i, 0);
+			}
+			else {
+				list.add(new SearchNode<T>(nodes.get(i)));
+				queue.enqueue(i, Integer.MAX_VALUE);
+			}
+			
+		}
+		
+		while (queue.size() > 0) {
+			
+			int u = queue.dequeue();
+			
+			for (Tuple<Integer, Integer> tuple : edges.get(u)) {
+				
+				int v  = tuple.getVal1();
+			
+				int alt = list.get(u).getDistance() + tuple.getVal2();
+				
+				if (alt < list.get(v).getDistance()) {
+					list.get(v).setDistance(alt);
+					list.get(v).setAncestor(list.get(u));
+					queue.decreaseKey(v, alt);
+				}
+				
+			}
+			
+		}
+		
+		return list;
+		
 	}
-
-	@Override
+	
 	public int[][] floydWarshall() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		int size = nodes.size();
+		
+		int[][] dist = new int[size][size];
+		
+		for (int i = 0; i < size; i++) {
+			
+			for (int j = 0; j < size; j++) {
+				
+				if (i != j) {
+					dist[i][j] = Integer.MAX_VALUE/2 - 1; // This prevents integer overflow while still giving a large value
+				}
+				
+			}
+			
+		}
+		
+		for (int i = 0; i < edges.size(); i++) {
+			
+			for (int j = 0; j < edges.get(i).size(); j++) {
+				
+				int index = edges.get(i).get(j).getVal1();
+				dist[i][index] = edges.get(i).get(j).getVal2();
+			}
+			
+		}
+	
+		
+		
+		for (int k = 0; k < size; k++) {
+			
+			for (int i = 0; i < size; i++) {
+				
+				for (int j = 0; j < size; j++) {	
+					
+					if (i != j) {
+						if (dist[i][j] > dist[i][k] + dist[k][j])
+							dist[i][j] = dist[i][k] + dist[k][j];
+					}
+				}
+				
+			}
+			
+		}
+		
+		return dist;
+		
 	}
 	
 }

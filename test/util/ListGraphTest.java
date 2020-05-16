@@ -16,49 +16,49 @@ class ListGraphTest {
 	
 	private void setSimpleGraph() {
 		lGraph = new ListGraph<String>(false, false, false);
-		lGraph.addVertex("Ariza");
-		lGraph.addVertex("Johan");
-		lGraph.addVertex("Mateo");
-		lGraph.addVertex("Restrepo");
+		lGraph.addNode("Ariza");
+		lGraph.addNode("Johan");
+		lGraph.addNode("Mateo");
+		lGraph.addNode("Restrepo");
 	}
 	
 	private void setDirectedGraph() {
 		
 		lGraph = new ListGraph<String>(true, false, false);
-		lGraph.addVertex("Ariza");
-		lGraph.addVertex("Johan");
-		lGraph.addVertex("Mateo");
-		lGraph.addVertex("Restrepo");
+		lGraph.addNode("Ariza");
+		lGraph.addNode("Johan");
+		lGraph.addNode("Mateo");
+		lGraph.addNode("Restrepo");
 		
 	}
 	
 	private void setMultipleGraph() {
 		
 		lGraph = new ListGraph<String>(false, true, false);
-		lGraph.addVertex("Ariza");
-		lGraph.addVertex("Johan");
-		lGraph.addVertex("Mateo");
-		lGraph.addVertex("Restrepo");
+		lGraph.addNode("Ariza");
+		lGraph.addNode("Johan");
+		lGraph.addNode("Mateo");
+		lGraph.addNode("Restrepo");
 		
 	}
 	
 	private void setLoopGraph() {
 		
 		lGraph = new ListGraph<String>(false, false, true);
-		lGraph.addVertex("Ariza");
-		lGraph.addVertex("Johan");
-		lGraph.addVertex("Mateo");
-		lGraph.addVertex("Restrepo");
+		lGraph.addNode("Ariza");
+		lGraph.addNode("Johan");
+		lGraph.addNode("Mateo");
+		lGraph.addNode("Restrepo");
 		
 	}
 
 	public void setUpSceneMultiDirectedGraph() {
 		
 		lGraph = new ListGraph<String>(true, true, true);
-		lGraph.addVertex("Ariza");
-		lGraph.addVertex("Johan");
-		lGraph.addVertex("Mateo");
-		lGraph.addVertex("Restrepo");
+		lGraph.addNode("Ariza");
+		lGraph.addNode("Johan");
+		lGraph.addNode("Mateo");
+		lGraph.addNode("Restrepo");
 		
 	}
 	
@@ -205,8 +205,8 @@ class ListGraphTest {
 		lGraph.addEdge("Ariza", "Johan");
 		lGraph.addEdge("Johan", "Mateo");
 		lGraph.addEdge("Restrepo", "Johan");
-		lGraph.removeVertex("Ariza");
-		lGraph.removeVertex("Mateo");
+		lGraph.removeNode("Ariza");
+		lGraph.removeNode("Mateo");
 		assertEquals(lGraph.getNode(0), "Johan");
 		assertEquals(lGraph.getNode(1), "Restrepo");
 		assertEquals(lGraph.getEdges().get(0).get(0).getVal1().intValue(), 1);
@@ -413,6 +413,132 @@ class ListGraphTest {
 		assertEquals(forest.getNode(3).getTimestamps().getVal2().intValue(), 8);
 		assertNull(forest.getNode(3).getAncestor());
 		//...
+	}
+	
+	@Test
+	void testPrim() {
+		
+		setMultipleGraph();
+		lGraph.addEdge("Mateo", "Ariza", 2);
+		lGraph.addEdge("Mateo", "Ariza", 1);
+		lGraph.addEdge("Ariza", "Restrepo", 3);
+		lGraph.addEdge("Ariza", "Restrepo", 6);
+		lGraph.addEdge("Mateo", "Restrepo", 5);
+		lGraph.addEdge("Mateo", "Johan", 4);
+		lGraph.addEdge("Restrepo", "Johan", 2);
+		
+		ListGraph<SearchNode<String>> tree = lGraph.prim("Mateo");
+		
+		assertEquals(tree.getNode(0).getColor(), SearchNode.BLACK);
+		assertEquals(tree.getNode(1).getColor(), SearchNode.BLACK);
+		assertEquals(tree.getNode(2).getColor(), SearchNode.BLACK);
+		assertEquals(tree.getNode(3).getColor(), SearchNode.BLACK);
+		
+		assertEquals(tree.getNode(0).getObject(), "Mateo");
+		assertEquals(tree.getNode(1).getObject(), "Ariza");
+		assertEquals(tree.getNode(2).getObject(), "Restrepo");
+		assertEquals(tree.getNode(3).getObject(), "Johan");
+		
+		Tuple<Integer, Integer> edge1 = tree.getEdge(tree.getNode(0), tree.getNode(1));
+		Tuple<Integer, Integer> edge2 = tree.getEdge(tree.getNode(1), tree.getNode(2));
+		Tuple<Integer, Integer> edge3 = tree.getEdge(tree.getNode(2), tree.getNode(3));
+		
+		assertEquals(edge1.getVal1().intValue(), 1);
+		assertEquals(edge1.getVal2().intValue(), 1);
+		assertEquals(edge2.getVal1().intValue(), 2);
+		assertEquals(edge2.getVal2().intValue(), 3);
+		assertEquals(edge3.getVal1().intValue(), 3);
+		assertEquals(edge3.getVal2().intValue(), 2);
+	}
+	
+	@Test
+	void testKruskal() {
+		
+		setMultipleGraph();
+		lGraph.addEdge("Mateo", "Ariza", 10);
+		lGraph.addEdge("Johan", "Ariza", 5);
+		lGraph.addEdge("Ariza", "Restrepo", 3);
+		lGraph.addEdge("Mateo", "Johan", 7);
+		lGraph.addEdge("Mateo", "Ariza", 20);
+		lGraph.addEdge("Johan", "Ariza", 50);
+		lGraph.addEdge("Ariza", "Restrepo", 33);
+		lGraph.addEdge("Mateo", "Johan", 72);
+		
+		ListGraph<SearchNode<String>> tree = lGraph.kruskal();
+		
+		assertEquals(tree.getNode(0).getObject(), "Ariza");
+		assertEquals(tree.getNode(1).getObject(), "Johan");
+		assertEquals(tree.getNode(2).getObject(), "Mateo");
+		assertEquals(tree.getNode(3).getObject(), "Restrepo");
+		
+		Tuple<Integer, Integer> edge1 = tree.getEdge(tree.getNode(0), tree.getNode(3));
+		Tuple<Integer, Integer> edge2 = tree.getEdge(tree.getNode(0), tree.getNode(1));
+		Tuple<Integer, Integer> edge3 = tree.getEdge(tree.getNode(1), tree.getNode(2));
+		
+		assertEquals(edge1.getVal2().intValue(), 3);
+		assertEquals(edge2.getVal2().intValue(), 5);
+		assertEquals(edge3.getVal2().intValue(), 7);
+		
+	}
+	
+	@Test
+	void testDjikstra() {
+		
+		setSimpleGraph();
+		lGraph.addEdge("Mateo", "Ariza", 2);
+		lGraph.addEdge("Restrepo", "Ariza", 3);
+		lGraph.addEdge("Ariza", "Johan", 5);
+		lGraph.addEdge("Mateo", "Johan", 2);
+		lGraph.addEdge("Mateo", "Restrepo", 9);
+		
+		ArrayList<SearchNode<String>> list = lGraph.djikstra("Ariza");
+		
+		assertEquals(list.get(0).getObject(), "Ariza");
+		assertEquals(list.get(1).getObject(), "Johan");
+		assertEquals(list.get(2).getObject(), "Mateo");
+		assertEquals(list.get(3).getObject(), "Restrepo");
+		
+		assertEquals(list.get(0).getAncestor(), null);
+		assertEquals(list.get(1).getAncestor(), list.get(2));
+		assertEquals(list.get(2).getAncestor(), list.get(0));
+		assertEquals(list.get(3).getAncestor(), list.get(0));
+		
+		assertEquals(list.get(0).getDistance(), 0);
+		assertEquals(list.get(1).getDistance(), 4);
+		assertEquals(list.get(2).getDistance(), 2);
+		assertEquals(list.get(3).getDistance(), 3);
+		
+	}
+	
+	@Test
+	void testFloydWarshall() {
+		
+		setDirectedGraph();
+		lGraph.addEdge("Ariza", "Mateo", -2);
+		lGraph.addEdge("Mateo", "Restrepo", 2);
+		lGraph.addEdge("Johan", "Mateo", 3);
+		lGraph.addEdge("Johan", "Ariza", 4);
+		lGraph.addEdge("Restrepo", "Johan", -1);
+		
+		int[][] matrix = lGraph.floydWarshall();
+		
+		assertEquals(matrix[0][0], 0);
+		assertEquals(matrix[0][1], -1);
+		assertEquals(matrix[0][2], -2);
+		assertEquals(matrix[0][3], 0);
+		assertEquals(matrix[1][0], 4);
+		assertEquals(matrix[1][1], 0);
+		assertEquals(matrix[1][2], 2);
+		assertEquals(matrix[1][3], 4);
+		assertEquals(matrix[2][0], 5);
+		assertEquals(matrix[2][1], 1);
+		assertEquals(matrix[2][2], 0);
+		assertEquals(matrix[2][3], 2);
+		assertEquals(matrix[3][0], 3);
+		assertEquals(matrix[3][1], -1);
+		assertEquals(matrix[3][2], 1);
+		assertEquals(matrix[3][3], 0);
+		
 	}
 	
 }

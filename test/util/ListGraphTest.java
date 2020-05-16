@@ -16,49 +16,49 @@ class ListGraphTest {
 	
 	private void setSimpleGraph() {
 		lGraph = new ListGraph<String>(false, false, false);
-		lGraph.addNode("Ariza");
-		lGraph.addNode("Johan");
-		lGraph.addNode("Mateo");
-		lGraph.addNode("Restrepo");
+		lGraph.addVertex("Ariza");
+		lGraph.addVertex("Johan");
+		lGraph.addVertex("Mateo");
+		lGraph.addVertex("Restrepo");
 	}
 	
 	private void setDirectedGraph() {
 		
 		lGraph = new ListGraph<String>(true, false, false);
-		lGraph.addNode("Ariza");
-		lGraph.addNode("Johan");
-		lGraph.addNode("Mateo");
-		lGraph.addNode("Restrepo");
+		lGraph.addVertex("Ariza");
+		lGraph.addVertex("Johan");
+		lGraph.addVertex("Mateo");
+		lGraph.addVertex("Restrepo");
 		
 	}
 	
 	private void setMultipleGraph() {
 		
 		lGraph = new ListGraph<String>(false, true, false);
-		lGraph.addNode("Ariza");
-		lGraph.addNode("Johan");
-		lGraph.addNode("Mateo");
-		lGraph.addNode("Restrepo");
+		lGraph.addVertex("Ariza");
+		lGraph.addVertex("Johan");
+		lGraph.addVertex("Mateo");
+		lGraph.addVertex("Restrepo");
 		
 	}
 	
 	private void setLoopGraph() {
 		
 		lGraph = new ListGraph<String>(false, false, true);
-		lGraph.addNode("Ariza");
-		lGraph.addNode("Johan");
-		lGraph.addNode("Mateo");
-		lGraph.addNode("Restrepo");
+		lGraph.addVertex("Ariza");
+		lGraph.addVertex("Johan");
+		lGraph.addVertex("Mateo");
+		lGraph.addVertex("Restrepo");
 		
 	}
 
 	public void setUpSceneMultiDirectedGraph() {
 		
 		lGraph = new ListGraph<String>(true, true, true);
-		lGraph.addNode("Ariza");
-		lGraph.addNode("Johan");
-		lGraph.addNode("Mateo");
-		lGraph.addNode("Restrepo");
+		lGraph.addVertex("Ariza");
+		lGraph.addVertex("Johan");
+		lGraph.addVertex("Mateo");
+		lGraph.addVertex("Restrepo");
 		
 	}
 	
@@ -205,8 +205,8 @@ class ListGraphTest {
 		lGraph.addEdge("Ariza", "Johan");
 		lGraph.addEdge("Johan", "Mateo");
 		lGraph.addEdge("Restrepo", "Johan");
-		lGraph.removeNode("Ariza");
-		lGraph.removeNode("Mateo");
+		lGraph.removeVertex("Ariza");
+		lGraph.removeVertex("Mateo");
 		assertEquals(lGraph.getNode(0), "Johan");
 		assertEquals(lGraph.getNode(1), "Restrepo");
 		assertEquals(lGraph.getEdges().get(0).get(0).getVal1().intValue(), 1);

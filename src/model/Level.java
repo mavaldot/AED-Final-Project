@@ -2,7 +2,7 @@ package model;
 
 import util.MatrixGraph;
 
-public class Level {
+public class Level implements Comparable<Level>{
 	
 	//Constants
 	public enum Color{
@@ -11,7 +11,7 @@ public class Level {
 	
 	//Attributes
 	private String name;
-	private int stars;
+	private int unlock;
 	private Color color;
 	
 	private int start;
@@ -20,16 +20,17 @@ public class Level {
 	private MatrixGraph<Node> graph;
 	
 	private int movements;
+	private int stars;
 	
 	//Constructor
-	public Level(String name, int stars, Color color, int start, int end, int player, MatrixGraph<Node> graph) {
+	public Level(String name, int unlock, Color color, int start, int end, MatrixGraph<Node> graph, int stars) {
 		this.name = name;
-		this.stars = stars;
+		this.unlock = unlock;
 		this.color = color;
 		
 		this.start = start;
 		this.end = end;
-		this.player = player;
+		this.player = start;
 		if(!graph.getMultipleEdges()){
 			this.graph = graph;
 		}
@@ -38,6 +39,8 @@ public class Level {
 		}
 		
 		this.movements = minMovements();
+		this.stars = stars;
+		
 	}
 	
 	//Methods
@@ -71,13 +74,20 @@ public class Level {
 	}
 	
 	public int starsEarned(){//Change
-		int stars = 0;
+		int starsE = 0;
 		
 		if((movements >= 0) && (movements <=2)){
-			stars = movements+1;
+			starsE = (movements+1) - stars;
+			if(starsE < 0){
+				starsE = 0;
+			}
+			else{
+				this.stars += starsE;
+			}
+			
 		}
 		
-		return stars;
+		return starsE;
 	}
 	
 	public int minMovements() {
@@ -88,17 +98,26 @@ public class Level {
 		return minMovements() + 2;
 	}
 	
+	//Compare
+	public int compareTo(Level level) {
+		return this.unlock - level.unlock;
+	}
+	
 	//Get
 	public String getName() {
 		return name;
 	}
 	
-	public int getStars() {
-		return stars;
+	public int getUnlock() {
+		return unlock;
 	}
 	
 	public Color getColor() {
 		return color;
+	}
+	
+	public int getStars() {
+		return stars;
 	}
 	
 }

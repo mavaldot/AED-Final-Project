@@ -5,7 +5,7 @@ import exception.MultipleEdgesException;
 import exception.NodeNotFoundException;
 import util.PriorityQueue.Priority;
 
-public class ListGraph<T>{
+public class ListGraph<T> implements InterfaceGraph<ListGraph<SearchNode<T>>, T>{
 	
 	private ArrayList<T> nodes;
 	private ArrayList<ArrayList<Tuple<Integer, Integer>>> edges;
@@ -25,7 +25,7 @@ public class ListGraph<T>{
 		
 	}
 	
-	public void addNode(T node) {
+	public void addVertex(T node) {
 		nodes.add(node);
 		edges.add(new ArrayList<>());
 		
@@ -124,7 +124,7 @@ public class ListGraph<T>{
 //		edges.remove(index);
 //	}
 	
-	public void removeNode(T node){
+	public void removeVertex(T node){
 
         int index = nodes.indexOf(node);
 
@@ -150,7 +150,7 @@ public class ListGraph<T>{
 
     }
 	
-	public boolean removeEdge(T node1, T node2, int weight) {
+	public void removeEdge(T node1, T node2, int weight) {
 		
 		boolean deleted = false;
 		
@@ -186,8 +186,6 @@ public class ListGraph<T>{
 			}
 			
 		}
-		
-		return deleted;
 		
 	}
 	
@@ -285,7 +283,7 @@ public class ListGraph<T>{
 		Queue<Integer> queue = new Queue<>();
 		queue.enqueue(nodes.indexOf(source));
 		
-		bfsTree.addNode(sNodes.get(nodes.indexOf(source)));
+		bfsTree.addVertex(sNodes.get(nodes.indexOf(source)));
 		
 		while (queue.size() > 0) {
 			
@@ -299,7 +297,7 @@ public class ListGraph<T>{
 				
 				if (sNodes.get(v).getColor() == SearchNode.WHITE) {
 					
-					bfsTree.addNode(sNodes.get(v));
+					bfsTree.addVertex(sNodes.get(v));
 					
 					sNodes.get(v).setColor(SearchNode.GRAY);
 					sNodes.get(v).setDistance(sNodes.get(u).getDistance() + 1);
@@ -329,7 +327,7 @@ public class ListGraph<T>{
 	public ListGraph<SearchNode<T>> dfs(){
 		ListGraph<SearchNode<T>> forest=new ListGraph<SearchNode<T>>(false, false, false);
 		for(T vertex: nodes) {
-			forest.addNode(new SearchNode<T>(vertex));
+			forest.addVertex(new SearchNode<T>(vertex));
 		}
 		
 		for(SearchNode<T> vertex: forest.getNodes()) {
@@ -417,7 +415,7 @@ public class ListGraph<T>{
 				
 			}
 			
-			tree.addNode(sNodes.get(u));
+			tree.addVertex(sNodes.get(u));
 			SearchNode<T> pred = sNodes.get(u).getAncestor();
 			
 			if (pred != null) {
@@ -438,7 +436,7 @@ public class ListGraph<T>{
 		
 		for(T node : nodes) {
 			sets.makeSet(node);
-			tree.addNode(new SearchNode<T>(node));
+			tree.addVertex(new SearchNode<T>(node));
 		}
 		
 		PriorityQueue<Tuple<SearchNode<T>, SearchNode<T>>> queue = new PriorityQueue<>(Priority.MIN);
@@ -470,7 +468,7 @@ public class ListGraph<T>{
 		return tree;
 	}
 	
-	public ArrayList<SearchNode<T>> djikstra(T source) {
+	public ArrayList<SearchNode<T>> dijkstra(T source) {
 		
 		int srcindex = nodes.indexOf(source);
 		

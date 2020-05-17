@@ -24,7 +24,7 @@ public class Manager {
 
 	//Methods
 	//Save
-	public void saveWorld(String url) throws IOException{
+	public void saveWorld(String url) throws IOException {
 		String[] worldData = readFile(url+WORLD_DATA).split("\n");
 		worldData[1] = world.getStars() + "";
 		writeFile(url+"/"+WORLD_DATA, worldData);
@@ -60,7 +60,7 @@ public class Manager {
 	}
 	
 	//Load
-	public void importWorld(String url) throws IOException{
+	public void importWorld(String url) throws IOException {
 		String[] worldData = readFile(url+WORLD_DATA).split("\n");
 		this.world = new World(worldData[0], Integer.parseInt(worldData[1]));
 		
@@ -138,6 +138,5 @@ public class Manager {
 	//Get
 	public World getWorld() {
 		return world;
-	}
-	
+	}	
 }

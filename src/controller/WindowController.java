@@ -29,6 +29,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import javafx.stage.DirectoryChooser;
@@ -42,14 +43,12 @@ import model.Node;
 public class WindowController implements Initializable {
 	
 	//Constants
-	private final static int ARR_SIZE = 8;
-	public final static double RADIUS = 25;
+	public final static double RADIUS = 50;
 	
 	public final static String LOSE_IMAGE = "/../../med/message/lose.png";
 	public final static String STAR_IMAGE_PATH = "/../../med/stars/starImage.png";
 	public final static String STAR_IMAGE2_PATH = "/../../med/stars/starImage2.png";
 	public final static String LOCKED_STAR_IMAGE_PATH = "/../../med/stars/locked.png";
-	public final static String REQUIRED_STARS = "/../../med/stars/required.png";
 	public final static String EGGS_IMAGE_PATH = "/../../med/eggs/";
 	public final static String EGGS_IMAGE_EXTENSION = ".png";
 	public final static String LOCKED_EGG = "/../../med/eggs/LOCKED.png";
@@ -318,31 +317,6 @@ public class WindowController implements Initializable {
 		 
 		//Graph
 			//Edge
-//		for(int j = 0; j < level.getGraph().getEdges().size(); j++) {
-//			if(level.getGraph().getEdge(level.getPlayer(), j).size() != 0){
-//				
-//				//Line
-//				Node node1 = level.getGraph().getVertices().get(level.getPlayer());
-//				double x1 = node1.getX() + xc;
-//				double y1 = node1.getY() + yc;
-//				
-//				Node node2 = level.getGraph().getVertices().get(j);
-//				double x2 = node2.getX() + xc;
-//				double y2 = node2.getY() + yc;
-//				
-//				gc.setFill(Color.BLACK);
-//				gc.strokeLine(x1, y1, x2, y2);
-//				//...
-//				//Number
-//				double xm = (x1 + x2) / 2;
-//				double ym = (y1 + y2) / 2;
-//				
-//				gc.setFill(Color.RED);
-//				gc.fillText(level.getGraph().getEdge(level.getPlayer(), j).get(0).toString(), xm, ym);
-//				//...
-//				
-//			}
-//		}
 		for(int i = 0; i < level.getGraph().getEdges().size(); i++) {
 			for(int j = 0; j < level.getGraph().getEdges().get(i).size(); j++) {
 				if(level.getGraph().getEdge(i, j).size() != 0){
@@ -359,27 +333,10 @@ public class WindowController implements Initializable {
 					gc.setFill(Color.BLACK);
 					gc.strokeLine(x1, y1, x2, y2);
 					//...
-					//Number
-					double xm = (x1 + x2) / 2;
-					double ym = (y1 + y2) / 2;
-					if(level.getPlayer() == i) {
-						gc.setFill(Color.RED);
-						gc.fillText(level.getGraph().getEdge(i, j).get(0).toString(), xm, ym);
-					}
-					//...
-					//Block
-					else if((level.getPlayer() == j) && level.getGraph().getDirected() && (level.getGraph().getEdge(j, i).size() == 0)){
-						File file = new File(SHYGUYS_IMAGE_PATH + "BLOCK" + SHYGUY_IMAGE_EXTENSION);
-						Image img = new Image(file.toURI().toString());
-						
-						double r = 35;
-						gc.drawImage(img, xm-r, ym-r, r*2, r*2);
-					}
-					//...
 				}
 			}
 		}
-		
+			//...
 			//Vertex
 		for(int i = 0; i < level.getGraph().getVertices().size(); i++) {
 			
@@ -409,6 +366,41 @@ public class WindowController implements Initializable {
 			//..
 			
 		}
+			//...
+			//Enemy
+		for(int i = 0; i < level.getGraph().getEdges().get(level.getPlayer()).size(); i++) {
+			Node node1 = level.getGraph().getVertices().get(level.getPlayer());
+			double x1 = node1.getX() + xc, y1 = node1.getY() + yc;
+			Node node2 = level.getGraph().getVertices().get(i);
+			double x2 = node2.getX() + xc, y2 = node2.getY() + yc;
+			double xm = (x1 + x2) / 2, ym = (y1 + y2) / 2;
+			
+			//Number
+			if(level.getGraph().getEdge(level.getPlayer(), i).size() != 0){
+				File file = new File(SHYGUYS_IMAGE_PATH + level.getGraph().getEdge(level.getPlayer(), i).get(0).toString() + SHYGUY_IMAGE_EXTENSION);
+				Image img = new Image(file.toURI().toString());
+				
+				double r = 40;
+				gc.drawImage(img, xm-r, ym-r, r*2, r*2);
+				
+				gc.setFill(Color.BLACK);
+				gc.setFont(new Font("Impact", 40));
+				gc.fillText(level.getGraph().getEdge(level.getPlayer(), i).get(0).toString(), xm + (r/2), ym - (r/2));
+			}
+			//...
+			//Block
+			else if(level.getGraph().getDirected() && (level.getGraph().getEdge(i, level.getPlayer()).size() != 0)){
+				File file = new File(SHYGUYS_IMAGE_PATH + "BLOCK" + SHYGUY_IMAGE_EXTENSION);
+				Image img = new Image(file.toURI().toString());
+				
+				double r = 60;
+				gc.drawImage(img, xm-r, ym-r, r*2, r*2);
+			}
+			//...
+		}
+			//...
+		
+		
 		
 	}
 	

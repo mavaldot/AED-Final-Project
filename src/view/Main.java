@@ -23,9 +23,10 @@ public class Main extends Application {
 			primaryStage.setMinHeight(screen.getHeight() + 50);
 			primaryStage.setMinWidth(screen.getWidth() + 20);
 			primaryStage.setScene(scene);
-			primaryStage.setTitle("Yoshi");
+			primaryStage.setTitle("Yoshi's Island: Johan's Quest");
 			primaryStage.show();
-		} catch(Exception e) {
+		}
+		catch(Exception e) {
 			e.printStackTrace();
 		}
 	}

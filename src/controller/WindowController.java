@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,6 +22,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -28,6 +30,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Affine;
@@ -43,8 +46,10 @@ import model.Node;
 public class WindowController implements Initializable {
 	
 	//Constants
+	private static final double DOTTED_LINE = 50;
 	public final static double RADIUS = 50;
 	
+	public final static String MOVEMENTS_IMAGE = "/../../med/movements/movements.gif";
 	public final static String LOSE_IMAGE = "/../../med/message/lose.png";
 	public final static String STAR_IMAGE_PATH = "/../../med/stars/starImage.png";
 	public final static String STAR_IMAGE2_PATH = "/../../med/stars/starImage2.png";
@@ -126,9 +131,14 @@ public class WindowController implements Initializable {
 	
 	//Generators
 	public void generateWorld() {
+		hBox.getChildren().clear();
 		worldName.setText(game.getWorld().getName());
 		starNumber.setText(game.getWorld().getStars() + "");
+        File file = new File(STAR_IMAGE_PATH);
+		starImage.setImage(new Image(file.toURI().toString()));
 		starImage.setVisible(true);
+		hBox.getChildren().addAll(worldName, starNumber, starImage);
+		this.level = null;
 		displayLevels();
 	}
 	
@@ -139,6 +149,23 @@ public class WindowController implements Initializable {
 		paintGraph();
 		canvas.setOnMouseClicked(event -> selectNode(event));
 		vBox.getChildren().add(canvas);
+		generateButtons();
+	}
+	
+	public void generateButtons() {
+		worldName.setText(level.getName());
+		starNumber.setText(level.getMovements() + "");
+        File file = new File(MOVEMENTS_IMAGE);
+		starImage.setImage(new Image(file.toURI().toString()));
+		Button back = new Button("Back to world");
+		Button restart = new Button("Restart");
+		back.setTranslateY(18);
+		back.setTranslateX(520);
+		restart.setTranslateY(18);
+		restart.setTranslateX(520);
+		back.setOnAction(event -> back());
+		restart.setOnAction(event -> restart());
+		hBox.getChildren().addAll(back, restart);
 	}
 	
 	public HBox generateHBox(Level.Color yoshiColor, String levelName, int starsEarned, Level level) {
@@ -331,7 +358,8 @@ public class WindowController implements Initializable {
 					double y2 = node2.getY() + yc;
 					
 					gc.setFill(Color.BLACK);
-					gc.strokeLine(x1, y1, x2, y2);
+					gc.setLineWidth(5);
+					strokeDottedLine(gc, x1, y1, x2, y2);
 					//...
 				}
 			}
@@ -361,7 +389,7 @@ public class WindowController implements Initializable {
 			if(level.getPlayer() == i) {
 				File file = new File(YOSHIS_IMAGE_PATH + level.getColor().name() + YOSHIS_IMAGE_EXTENSION);
 				Image img = new Image(file.toURI().toString());
-				gc.drawImage(img, x, y, d, d);
+				gc.drawImage(img, x, y - (RADIUS / 1.5), d, d);
 			}
 			//..
 			
@@ -406,6 +434,7 @@ public class WindowController implements Initializable {
 	
 	//Supporters
 	public void selectNode(MouseEvent e){
+		
 		if(!level.win() && !level.lose()) {
 			
 			double x = e.getX();
@@ -425,6 +454,7 @@ public class WindowController implements Initializable {
 					
 					if(level.move(i)) {
 						paintGraph();
+						UpdateMovements();
 					}
 					
 					//Win
@@ -434,7 +464,6 @@ public class WindowController implements Initializable {
 						game.getWorld().addStars(level.starsEarned());
 						
 						level.restart();
-						this.level = null;
 						save();
 						generateWorld();
 					}
@@ -444,7 +473,6 @@ public class WindowController implements Initializable {
 						showLoseAlert();
 						
 						level.restart();
-						this.level = null;
 						generateWorld();
 					}
 					//...
@@ -454,6 +482,86 @@ public class WindowController implements Initializable {
 				
 			}
 			
+		}
+	}
+	
+	public void UpdateMovements() {
+		starNumber.setText(level.getMovements() + "");
+	}
+	
+	public void back() {
+		
+		//Creates an alert.
+		ButtonType accept = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
+		ButtonType cancel = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+		Alert alert = new Alert(AlertType.NONE, "", accept, cancel);
+		alert.setHeaderText(null);
+		alert.setTitle(null);
+		alert.initStyle(StageStyle.UNDECORATED);
+		
+		//Set the style of the alert.
+		DialogPane dialogPane = alert.getDialogPane();
+		dialogPane.getStylesheets().add(getClass().getResource("/view/Style.css").toExternalForm());
+		Stage stage = (Stage) dialogPane.getScene().getWindow();
+		stage.getIcons().add(new Image("file:../../med/logo.png"));
+		
+		HBox itemBox = new HBox();
+		itemBox.setSpacing(5);
+		itemBox.setAlignment(Pos.CENTER);
+		
+		Label text = new Label("Your progress in this level will lose, are you sure?");
+		text.setId("alerts");
+		itemBox.getChildren().add(text);
+		
+		dialogPane.setContent(itemBox);
+		
+		Optional <ButtonType> action = alert.showAndWait();
+		
+		if(action.get() == accept) {
+			
+			generateWorld();
+		}
+	}
+	
+	public void restart() {
+		
+		//Creates an alert.
+		ButtonType accept = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
+		ButtonType cancel = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+		Alert alert = new Alert(AlertType.NONE, "", accept, cancel);
+		alert.setHeaderText(null);
+		alert.setTitle(null);
+		alert.initStyle(StageStyle.UNDECORATED);
+		
+		//Set the style of the alert.
+		DialogPane dialogPane = alert.getDialogPane();
+		dialogPane.getStylesheets().add(getClass().getResource("/view/Style.css").toExternalForm());
+		Stage stage = (Stage) dialogPane.getScene().getWindow();
+		stage.getIcons().add(new Image("file:../../med/logo.png"));
+		
+		HBox itemBox = new HBox();
+		itemBox.setSpacing(5);
+		itemBox.setAlignment(Pos.CENTER);
+		
+		Label text = new Label("Your progress in this level will lose, are you sure?");
+		text.setId("alerts");
+		itemBox.getChildren().add(text);
+		
+		dialogPane.setContent(itemBox);
+		
+		Optional <ButtonType> action = alert.showAndWait();
+		
+		if(action.get() == accept) {
+			
+			canvas = new Canvas(vBox.getWidth(), vBox.getHeight());
+			vBox.getChildren().clear();
+			level.restart();
+			paintGraph();
+		    canvas.setOnMouseClicked(event -> selectNode(event));
+			vBox.getChildren().add(canvas);
+			starNumber.setText(level.getMovements() + "");
+	        File file = new File(MOVEMENTS_IMAGE);
+			starImage.setImage(new Image(file.toURI().toString()));
 		}
 	}
 	
@@ -505,7 +613,7 @@ public class WindowController implements Initializable {
 		itemBox.setAlignment(Pos.CENTER);
 		
 		Label text = new Label("You Win!");
-		text.setId("endGameMessage");
+		text.setId("alerts");
 		itemBox.getChildren().add(text);
 		
 		int starsEarned = level.starsInGame();
@@ -559,7 +667,7 @@ public class WindowController implements Initializable {
         itemBox.setAlignment(Pos.CENTER);
 		
 		Label text = new Label("You Lose!");
-		text.setId("endGameMessage");
+		text.setId("alerts");
 		itemBox.getChildren().add(text);
 		
 		ImageView lose = new ImageView();
@@ -574,4 +682,28 @@ public class WindowController implements Initializable {
 		//Shows the alert.
 		alert.showAndWait();
 	}
+	
+	public void strokeDottedLine(GraphicsContext gc, double x1, double y1, double x2, double y2) {
+
+        double distance = Math.sqrt(Math.pow((x1-x2), 2) + (Math.pow((y1-y2), 2)));
+        int div = (int) (Math.ceil(distance / DOTTED_LINE) * 2) + 1;//Odd
+
+        double xp = 0, yp = 0;
+        double xo = 0, yo = 0;
+        for(int i = 0; i <= div; i++){
+
+            if((i % 2) == 0){
+                xp = ((x1 * (div - i)) + (x2 * i)) / div;
+                yp = ((y1 * (div - i)) + (y2 * i)) / div;
+            }
+            else {
+                xo = ((x1 * (div - i)) + (x2 * i)) / div;
+                yo = ((y1 * (div - i)) + (y2 * i)) / div;
+
+                gc.strokeLine(xp, yp, xo, yo);
+            }
+
+        }
+
+    }
 }

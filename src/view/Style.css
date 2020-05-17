@@ -29,8 +29,6 @@
 
 /*~Button~*/
 .button{
-	-fx-background-color:Transparent;
-	
 	-fx-text-fill:-item;
 	-fx-font-family:Verdana;
 	-fx-font-size:20;
@@ -155,6 +153,17 @@
 }
 
 #endGameMessage .text {
+    -fx-stroke: black;
+    -fx-stroke-width: 0.8;
+}
+
+#alerts {
+	
+    -fx-font: bold 25px Impact;
+	-fx-text-fill: white;
+}
+
+#alerts .text {
     -fx-stroke: black;
     -fx-stroke-width: 0.8;
 }

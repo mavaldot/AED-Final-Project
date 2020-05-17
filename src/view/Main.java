@@ -15,7 +15,7 @@ public class Main extends Application {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("Window.fxml"));//FXML
 			BorderPane root = (BorderPane) loader.load();
-//			root.getStylesheets().add(getClass().getResource("Style.css").toExternalForm());//CSS
+			root.getStylesheets().add(getClass().getResource("Style.css").toExternalForm());//CSS
 			//Gets the screen dimensions
 			Rectangle2D screen = Screen.getPrimary().getVisualBounds();
 			Scene scene = new Scene(root, screen.getWidth(), screen.getHeight());

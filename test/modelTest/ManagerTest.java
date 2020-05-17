@@ -22,7 +22,7 @@ class ManagerTest {
 	@Test
 	void testImportWorld() throws Exception{
 		setUpSceneEmptyManager();
-		manager.importWorld("filesTest/world/");
+		manager.importWorld("filesTest/world");
 		
 		assertEquals(manager.getWorld().getName(), "World");
 		assertEquals(manager.getWorld().getStars(), 2);

@@ -16,6 +16,7 @@ public class Manager {
 	public final static String WORLD_DATA = "world.wrd";
 	
 	//Attributes
+	private String url;
 	private World world;
 	
 	//Constructor
@@ -24,14 +25,15 @@ public class Manager {
 
 	//Methods
 	//Save
-	public void saveWorld(String url) throws IOException {
-		String[] worldData = readFile(url+WORLD_DATA).split("\n");
+	public void saveWorld() throws IOException {
+		String[] worldData = readFile(url+"/"+WORLD_DATA).split("\n");
 		worldData[1] = world.getStars() + "";
 		writeFile(url+"/"+WORLD_DATA, worldData);
 		
 		File[] levelsFiles = new File(url).listFiles();
 		for(File level: levelsFiles) {
-			if(level.getName().substring(level.getName().lastIndexOf(".")).equals(LEVEL_EXTENSION)) {
+			String ext = level.getName().substring(level.getName().length()-3, level.getName().length());
+			if(ext.equals(LEVEL_EXTENSION)) {
 				try{
 					
 					String[] levelData = readFile(level.getPath()).split("\n");
@@ -61,7 +63,7 @@ public class Manager {
 	
 	//Load
 	public void importWorld(String url) throws IOException {
-		String[] worldData = readFile(url+WORLD_DATA).split("\n");
+		String[] worldData = readFile(url+"/"+WORLD_DATA).split("\n");
 		this.world = new World(worldData[0], Integer.parseInt(worldData[1]));
 		
 		File[] levelsFiles = new File(url).listFiles();
@@ -111,6 +113,8 @@ public class Manager {
 				}
 			}
 		}
+		
+		this.url = url;
 	}
 	
 	//Read

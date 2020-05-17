@@ -20,7 +20,7 @@
 
 /*~Container~*/
 #pane{
-	-fx-background-color:-back-med;
+	-fx-background-color: white;
 }
 
 /*~Label~*/
@@ -100,6 +100,7 @@
 
 /*~BarMenu~*/
 
+
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 /*~Title (App Name)~*/
@@ -123,4 +124,39 @@
 	-fx-text-fill:-item-highlight;
 	-fx-font-size:40;
 }
+/*Custom---------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+#world {
+	
+    -fx-font: bold 40px Impact;
+	-fx-text-fill: white;
+}
+
+#world .text {
+    -fx-stroke: black;
+    -fx-stroke-width: 0.8;
+}
+
+#level {
+	
+    -fx-font: bold 25px Impact;
+	-fx-text-fill: white;
+}
+
+#level .text {
+    -fx-stroke: black;
+    -fx-stroke-width: 0.8;
+}
+
+#endGameMessage {
+	
+    -fx-font: bold 25px Impact;
+	-fx-text-fill: white;
+}
+
+#endGameMessage .text {
+    -fx-stroke: black;
+    -fx-stroke-width: 0.8;
+}
+
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/

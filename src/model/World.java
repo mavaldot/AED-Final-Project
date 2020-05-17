@@ -31,6 +31,10 @@ public class World {
 		}
 	}
 	
+	public void addStars(int stars) {
+		this.stars += stars;
+	}
+	
 	//Search
 	public Level searchLevel(String name) {
 		Level level = null;

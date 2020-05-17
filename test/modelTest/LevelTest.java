@@ -40,9 +40,9 @@ class LevelTest {
 		graph.addEdge(graph.getVertex(0), graph.getVertex(2), 1);
 		graph.addEdge(graph.getVertex(0), graph.getVertex(3), 1);
 		
-		graph.addEdge(graph.getVertex(1), graph.getVertex(4), 1);
-		graph.addEdge(graph.getVertex(2), graph.getVertex(4), 2);
-		graph.addEdge(graph.getVertex(3), graph.getVertex(4), 3);
+		graph.addEdge(graph.getVertex(1), graph.getVertex(4), 2);
+		graph.addEdge(graph.getVertex(2), graph.getVertex(4), 3);
+		graph.addEdge(graph.getVertex(3), graph.getVertex(4), 6);
 		
 		level = new Level("Johan", 2, Color.RED, 0, 4, graph, 0);
 	}
@@ -53,27 +53,35 @@ class LevelTest {
 		setUpSceneNormalLevel();
 		
 		assertEquals(level.getPlayer(), 0);
-		assertEquals(level.getMovements(), 5);
+		assertEquals(level.getMovements(), 7);
 		
 		assertTrue(level.move(1));
 		assertEquals(level.getPlayer(), 1);
-		assertEquals(level.getMovements(), 4);
+		assertEquals(level.getMovements(), 6);
 		
 		assertTrue(level.move(2));
 		assertEquals(level.getPlayer(), 2);
-		assertEquals(level.getMovements(), 2);
+		assertEquals(level.getMovements(), 4);
 		
 		assertTrue(level.move(1));
 		assertEquals(level.getPlayer(), 1);
-		assertEquals(level.getMovements(), 1);
+		assertEquals(level.getMovements(), 3);
 		
 		assertFalse(level.move(0));
 		assertEquals(level.getPlayer(), 1);
+		assertEquals(level.getMovements(), 3);
+		
+		assertTrue(level.move(2));
+		assertEquals(level.getPlayer(), 2);
 		assertEquals(level.getMovements(), 1);
+		
+		assertTrue(level.move(1));
+		assertEquals(level.getPlayer(), 1);
+		assertEquals(level.getMovements(), 0);
 		
 		assertFalse(level.move(2));
 		assertEquals(level.getPlayer(), 1);
-		assertEquals(level.getMovements(), 1);
+		assertEquals(level.getMovements(), 0);
 	}
 	
 	@Test
@@ -90,6 +98,12 @@ class LevelTest {
 	@Test
 	void testLose() {
 		setUpSceneNormalLevel();
+		
+		level.move(1);
+		assertFalse(level.lose());
+		
+		level.move(2);
+		assertFalse(level.lose());
 		
 		level.move(1);
 		assertFalse(level.lose());
@@ -131,6 +145,39 @@ class LevelTest {
 		
 		level.move(4);
 		assertEquals(level.starsEarned(), 1);
+		//...
+	}
+	
+	@Test
+	public void testStarsInGame() {
+		//3
+		setUpSceneStarsLevel();
+		
+		level.move(1);
+		assertEquals(level.starsInGame(), 0);
+		
+		level.move(4);
+		assertEquals(level.starsInGame(), 3);
+		//...
+		
+		//2
+		setUpSceneStarsLevel();
+		
+		level.move(2);
+		assertEquals(level.starsInGame(), 0);
+		
+		level.move(4);
+		assertEquals(level.starsInGame(), 2);
+		//...
+		
+		//1
+		setUpSceneStarsLevel();
+		
+		level.move(3);
+		assertEquals(level.starsInGame(), 0);
+		
+		level.move(4);
+		assertEquals(level.starsInGame(), 1);
 		//...
 	}
 	

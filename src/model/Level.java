@@ -8,6 +8,7 @@ import util.SearchNode;
 public class Level implements Comparable<Level>{
 	
 	//Constants
+	public final static int LIMIT = 4;
 	public enum Color{
 		GREEN, RED, BLUE, YELLOW;
 	}
@@ -83,11 +84,16 @@ public class Level implements Comparable<Level>{
 		return lose;
 	}
 	
+	public void restart() {
+		this.player = this.start;
+		this.movements = maxMovements();
+	}
+	
 	public int starsEarned(){//Change
 		int starsE = 0;
 		
-		if((movements >= 0) && (movements <=2)){
-			starsE = (movements+1) - stars;
+		if((movements >= 0) && (movements <=LIMIT)){
+			starsE = (int) (Math.floor(((double)(movements+2))/2) - stars);
 			if(starsE < 0){
 				starsE = 0;
 			}
@@ -100,12 +106,22 @@ public class Level implements Comparable<Level>{
 		return starsE;
 	}
 	
+	public int starsInGame(){
+		int stars = 0;
+		
+		if((movements >= 0) && (movements <=LIMIT)){
+			stars = (int) (Math.floor(((double)(movements+2))/2));
+		}
+		
+		return stars;
+	}
+	
 	public int minMovements() {
 		return graph.dijkstra(graph.getVertex(start)).get(end).getDistance();
 	}
 	
-	public int maxMovements(){//Change
-		return minMovements() + 2;
+	public int maxMovements(){
+		return minMovements() + LIMIT;
 	}
 	
 	public static boolean checkPlayable(MatrixGraph<Node> graph, int start, int end) {

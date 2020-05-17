@@ -20,7 +20,7 @@ class ManagerTest {
 	
 	//Test
 	@Test
-	void testImportWorld() {
+	void testImportWorld() throws Exception{
 		setUpSceneEmptyManager();
 		manager.importWorld("filesTest/world/");
 		

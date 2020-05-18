@@ -7,7 +7,7 @@
 	
 	/*~Item~*/
 	-item:White;
-	-item-highlight:DeepSkyBlue;
+	-item-highlight:White;
 	
 }
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -32,14 +32,14 @@
 
 /*~Button~*/
 .button{
-	-fx-text-fill:-item;
+	-fx-text-fill:black;
 	-fx-font-family:Verdana;
 	-fx-font-size:20;
 	-fx-font-weight:bold;
 }
 .button:hover{/*+Hover*/
 	-fx-background-color:-back-med;
-	-fx-text-fill:-item-highlight;
+	-fx-text-fill:white;
 }
 .button:pressed{/*+Pressed*/
 	-fx-background-color:-back-min;

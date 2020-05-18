@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -24,6 +25,7 @@ public class Main extends Application {
 			primaryStage.setMinWidth(screen.getWidth() + 20);
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Yoshi's Island: Johan's Quest");
+			primaryStage.getIcons().add(new Image("file:../../med/eggs/GREEN.png"));
 			primaryStage.show();
 		}
 		catch(Exception e) {

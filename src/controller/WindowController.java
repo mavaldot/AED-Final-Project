@@ -118,8 +118,8 @@ public class WindowController implements Initializable {
 		try {
 			File selectedDir = dirChooser.showDialog(stage);
 			game.importWorld(selectedDir.getPath());
-			pane.setStyle("-fx-background-image: url("+selectedDir.toURI()+BACKGROUND_IMAGE_PATH+");");
 			generateWorld();
+			pane.setStyle("-fx-background-image: url("+selectedDir.toURI()+BACKGROUND_IMAGE_PATH+");");
 		}
 		catch(NullPointerException e) {
 			showAlert("Please select a folder");

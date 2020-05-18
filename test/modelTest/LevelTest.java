@@ -149,7 +149,7 @@ class LevelTest {
 	}
 	
 	@Test
-	public void testStarsInGame() {
+	void testStarsInGame() {
 		//3
 		setUpSceneStarsLevel();
 		

@@ -21,6 +21,9 @@
 /*~Container~*/
 #pane{
 	-fx-background-color: white;
+	-fx-background-size: cover;
+	-fx-background-position: center;
+	-fx-background-repeat: no-repeat;
 }
 
 /*~Label~*/
@@ -97,8 +100,15 @@
 }
 
 /*~BarMenu~*/
+.menu-bar .label {
+    -fx-font: bold 22px Impact;
+    -fx-text-fill: white;
+}
 
-
+.menu-bar .label .text {
+    -fx-stroke: black;
+    -fx-stroke-width: 0.8;
+}
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 /*~Title (App Name)~*/

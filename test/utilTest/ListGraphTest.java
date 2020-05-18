@@ -54,7 +54,7 @@ class ListGraphTest {
 		
 	}
 
-	public void setUpSceneMultiDirectedGraph() {
+	private void setUpSceneMultiDirectedGraph() {
 		
 		lGraph = new ListGraph<String>(true, true, true);
 		lGraph.addVertex("Ariza");

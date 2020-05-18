@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
@@ -33,6 +34,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import javafx.stage.DirectoryChooser;
@@ -51,16 +55,25 @@ public class WindowController implements Initializable {
 	
 	public final static String MOVEMENTS_IMAGE = "/../../med/movements/movements.gif";
 	public final static String LOSE_IMAGE = "/../../med/message/lose.png";
+	public final static String BACKGROUND_IMAGE_PATH = "BACKGROUND.gif";
+		//STARS
 	public final static String STAR_IMAGE_PATH = "/../../med/stars/starImage.png";
 	public final static String STAR_IMAGE2_PATH = "/../../med/stars/starImage2.png";
 	public final static String LOCKED_STAR_IMAGE_PATH = "/../../med/stars/locked.png";
+		//EGGS
 	public final static String EGGS_IMAGE_PATH = "/../../med/eggs/";
 	public final static String EGGS_IMAGE_EXTENSION = ".png";
 	public final static String LOCKED_EGG = "/../../med/eggs/LOCKED.png";
+		//YOSHIS
 	public final static String YOSHIS_IMAGE_PATH = "/../../med/yoshis/";
 	public final static String YOSHIS_IMAGE_EXTENSION = ".png";
+		//SHY GUYS
 	public final static String SHYGUYS_IMAGE_PATH = "/../../med/shyguys/";
 	public final static String SHYGUY_IMAGE_EXTENSION = ".png";
+		//NODES
+	public final static String NODE_IMAGE_PATH = "/../../med/node/";
+	public final static String NODE_IMAGE_EXTENSION = ".png";
+	
 	public final static String WORLDS_PATH = "worlds/";
 	
 	private @FXML BorderPane pane;
@@ -105,6 +118,7 @@ public class WindowController implements Initializable {
 		try {
 			File selectedDir = dirChooser.showDialog(stage);
 			game.importWorld(selectedDir.getPath());
+			pane.setStyle("-fx-background-image: url("+selectedDir.toURI()+BACKGROUND_IMAGE_PATH+");");
 			generateWorld();
 		}
 		catch(NullPointerException e) {
@@ -131,16 +145,19 @@ public class WindowController implements Initializable {
 	
 	//Generators
 	public void generateWorld() {
-		hBox.getChildren().clear();
-		worldName.setText(game.getWorld().getName());
-		starNumber.setText(game.getWorld().getStars() + "");
+        hBox.getChildren().clear();
+        worldName.setText(game.getWorld().getName());
+        starNumber.setText(game.getWorld().getStars() + "");
         File file = new File(STAR_IMAGE_PATH);
-		starImage.setImage(new Image(file.toURI().toString()));
-		starImage.setVisible(true);
-		hBox.getChildren().addAll(worldName, starNumber, starImage);
-		this.level = null;
-		displayLevels();
-	}
+        starImage.setImage(new Image(file.toURI().toString()));
+        starImage.setVisible(true);
+        double lenght = worldName.prefWidth(-1) + 220;
+        starImage.setTranslateX(screen.getWidth() - lenght);
+        starNumber.setTranslateX(screen.getWidth() - lenght);
+        hBox.getChildren().addAll(worldName, starNumber, starImage);
+        this.level = null;
+        displayLevels();
+    }
 	
 	public void generateLevel() {
 		canvas = new Canvas(vBox.getWidth(), vBox.getHeight());
@@ -152,21 +169,25 @@ public class WindowController implements Initializable {
 		generateButtons();
 	}
 	
-	public void generateButtons() {
-		worldName.setText(level.getName());
-		starNumber.setText(level.getMovements() + "");
+    public void generateButtons() {
+        worldName.setText(level.getName());
+        starNumber.setText(level.getMovements() + "");
         File file = new File(MOVEMENTS_IMAGE);
-		starImage.setImage(new Image(file.toURI().toString()));
-		Button back = new Button("Back to world");
-		Button restart = new Button("Restart");
-		back.setTranslateY(18);
-		back.setTranslateX(520);
-		restart.setTranslateY(18);
-		restart.setTranslateX(520);
-		back.setOnAction(event -> back());
-		restart.setOnAction(event -> restart());
-		hBox.getChildren().addAll(back, restart);
-	}
+        starImage.setImage(new Image(file.toURI().toString()));
+        double lenght = worldName.prefWidth(-1);
+        starImage.setTranslateX(screen.getWidth() - (lenght + 210));
+        starNumber.setTranslateX(screen.getWidth() - (lenght + 210));
+        Button back = new Button("Back to world");
+        Button restart = new Button("Restart");
+        back.setTranslateY(18);
+        back.setTranslateX(640 - lenght);
+        restart.setTranslateY(18);
+        restart.setTranslateX(640 - lenght);
+        back.setOnAction(event -> back());
+        restart.setOnAction(event -> restart());
+        hBox.getChildren().addAll(back, restart);
+    }
+
 	
 	public HBox generateHBox(Level.Color yoshiColor, String levelName, int starsEarned, Level level) {
 		
@@ -321,17 +342,13 @@ public class WindowController implements Initializable {
 		load.setOnAction(event -> loadWorld());
 	}
 	
-	public void initializeHeader() {
-		
-		//Sets the image.
+    public void initializeHeader() {
+
+        //Sets the image.
         File file = new File(STAR_IMAGE_PATH);
-		starImage.setImage(new Image(file.toURI().toString()));
-		starImage.setVisible(false);
-		
-		//Adjust the components to the screen
-		starImage.setTranslateX(screen.getWidth() - 300);
-		starNumber.setTranslateX(screen.getWidth() - 300);
-	}
+        starImage.setImage(new Image(file.toURI().toString()));
+        starImage.setVisible(false);
+    }
 	
 	public void paintGraph() {
 		GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -357,8 +374,6 @@ public class WindowController implements Initializable {
 					double x2 = node2.getX() + xc;
 					double y2 = node2.getY() + yc;
 					
-					gc.setFill(Color.BLACK);
-					gc.setLineWidth(5);
 					strokeDottedLine(gc, x1, y1, x2, y2);
 					//...
 				}
@@ -371,18 +386,17 @@ public class WindowController implements Initializable {
 			Node node = level.getGraph().getVertices().get(i);
 			
 			//Node
-			if(level.getEnd() == i) {
-				gc.setFill(Color.GREEN);
-			}
-			else{
-				gc.setFill(Color.BROWN);
-			}
+			File fileV = null;
+			Image imgV = null;
+			if(level.getEnd() == i) fileV = new File(NODE_IMAGE_PATH + "END" + NODE_IMAGE_EXTENSION);
+			else fileV = new File(NODE_IMAGE_PATH + "NODE" + NODE_IMAGE_EXTENSION);
+			imgV = new Image(fileV.toURI().toString());
 			
 			double d = RADIUS * 2;
 			double x = node.getX() - RADIUS + xc;
 			double y = node.getY() - RADIUS + yc;
 			
-			gc.fillOval(x, y, d, d);
+			gc.drawImage(imgV, x, y, d, d);
 			//...
 			
 			//Player
@@ -405,15 +419,24 @@ public class WindowController implements Initializable {
 			
 			//Number
 			if(level.getGraph().getEdge(level.getPlayer(), i).size() != 0){
-				File file = new File(SHYGUYS_IMAGE_PATH + level.getGraph().getEdge(level.getPlayer(), i).get(0).toString() + SHYGUY_IMAGE_EXTENSION);
-				Image img = new Image(file.toURI().toString());
-				
-				double r = 40;
-				gc.drawImage(img, xm-r, ym-r, r*2, r*2);
-				
-				gc.setFill(Color.BLACK);
-				gc.setFont(new Font("Impact", 40));
-				gc.fillText(level.getGraph().getEdge(level.getPlayer(), i).get(0).toString(), xm + (r/2), ym - (r/2));
+				if(level.getGraph().getEdge(level.getPlayer(), i).get(0) != 0) {
+					int m = level.getGraph().getEdge(level.getPlayer(), i).get(0) % 10;
+					File file = new File(SHYGUYS_IMAGE_PATH + m + SHYGUY_IMAGE_EXTENSION);
+					Image img = new Image(file.toURI().toString());
+					
+					double r = 40;
+					gc.drawImage(img, xm-r, ym-r, r*2, r*2);
+					
+					gc.setTextAlign(TextAlignment.CENTER);
+					gc.setTextBaseline(VPos.CENTER);
+					
+					gc.setFill(Color.BLACK);
+					gc.setFont(Font.font("Impact", FontWeight.BOLD, 40));
+					gc.fillText(level.getGraph().getEdge(level.getPlayer(), i).get(0).toString(), xm + (r/1.5), ym - (r/1.5));
+					gc.setFill(Color.WHITE);
+					gc.setFont(Font.font("Impact", 36));
+					gc.fillText(level.getGraph().getEdge(level.getPlayer(), i).get(0).toString(), xm + (r/1.5), ym - (r/1.5) - 1);
+				}
 			}
 			//...
 			//Block
@@ -566,23 +589,33 @@ public class WindowController implements Initializable {
 	}
 	
 	public void showAlert(String message) {
-		
-		//Creates an alert.
-		ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-		Alert alert = new Alert(AlertType.NONE, message, ok);
-		alert.setHeaderText(null);
-		alert.setTitle(null);
-		alert.initStyle(StageStyle.UNDECORATED);
-		
-		//Set the style of the alert.
-		DialogPane dialogPane = alert.getDialogPane();
-		dialogPane.getStylesheets().add(getClass().getResource("/view/Style.css").toExternalForm());
-		Stage stage = (Stage) dialogPane.getScene().getWindow();
-		stage.getIcons().add(new Image("file:../../med/logo.png"));
-		
-		//Shows the alert.
-		alert.showAndWait();
-	}
+
+        //Creates an alert.
+        ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        Alert alert = new Alert(AlertType.NONE, message, ok);
+        alert.setHeaderText(null);
+        alert.setTitle(null);
+        alert.initStyle(StageStyle.UNDECORATED);
+
+        //Set the style of the alert.
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/view/Style.css").toExternalForm());
+        Stage stage = (Stage) dialogPane.getScene().getWindow();
+        stage.getIcons().add(new Image("file:../../med/logo.png"));
+
+        HBox itemBox = new HBox();
+        itemBox.setSpacing(5);
+        itemBox.setAlignment(Pos.CENTER);
+
+        Label text = new Label(message);
+        text.setId("alerts");
+        itemBox.getChildren().add(text);
+
+        dialogPane.setContent(itemBox);
+
+        //Shows the alert.
+        alert.showAndWait();
+    }
 	
 	public void save() {
 		try {
@@ -700,6 +733,11 @@ public class WindowController implements Initializable {
                 xo = ((x1 * (div - i)) + (x2 * i)) / div;
                 yo = ((y1 * (div - i)) + (y2 * i)) / div;
 
+                gc.setStroke(Color.BLACK);
+                gc.setLineWidth(6);
+                gc.strokeLine(xp, yp, xo, yo);
+                gc.setStroke(Color.WHITE);
+                gc.setLineWidth(3);
                 gc.strokeLine(xp, yp, xo, yo);
             }
 
